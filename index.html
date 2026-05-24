@@ -562,7 +562,26 @@
             h2 { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
         }
 
-        </style>
+        
+@media (max-width: 767px) {
+.hamburger span { display: block; width: 22px; height: 2px; background: #e2e8f0; border-radius: 2px; }
+.mobile-menu { display: none; position: fixed; top: 61px; left: 0; right: 0; background: rgba(8,12,16,0.97); backdrop-filter: blur(24px); border-bottom: 1px solid #1e2d3d; padding: 1.5rem; z-index: 49; flex-direction: column; gap: 1.25rem; }
+.mobile-menu a { color: #4a6178; text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem 0; border-bottom: 1px solid #1e2d3d; }
+.mobile-menu button { width: 100%; text-align: center; margin-top: 0.5rem; padding: 0.75rem; }
+}
+
+@media (max-width: 767px) {
+    header { padding: 0.875rem 1rem !important; }
+    nav { display: none !important; }
+    .hamburger { display: flex !important; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: #e2e8f0; border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; top: 61px; left: 0; right: 0; background: rgba(8,12,16,0.97); backdrop-filter: blur(24px); border-bottom: 1px solid #1e2d3d; padding: 1.5rem; z-index: 49; flex-direction: column; gap: 1.25rem; }
+    .mobile-menu.open { display: flex !important; }
+    .mobile-menu a { color: #4a6178; text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem 0; border-bottom: 1px solid #1e2d3d; }
+    .mobile-menu button { width: 100%; text-align: center; margin-top: 0.5rem; padding: 0.75rem; }
+}
+@media (min-width: 768px) { .hamburger { display: none !important; } }
+</style>
 </head>
 <body>
 
@@ -589,7 +608,7 @@
                 <button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button>
             </div>
         </div>
-    </header>
+    <button class="hamburger" onclick="document.getElementById(chr(39)mobileMenu chr(39)).classList.toggle(chr(39)open chr(39))" aria-label="Menu"><span></span><span></span><span></span></button><button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button></header><div class="mobile-menu" id="mobileMenu"><a href="#consulting">Consulting</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button></div><div class="mobile-menu" id="mobileMenu"><a href="#consulting">Consulting</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><button class="btn-primary" onclick="window.location.href=chr(39)booking.html chr(39)">Book Consultation</button></div>
 
     <!-- Hero -->
     <section id="home" class="hero">
