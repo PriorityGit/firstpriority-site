@@ -585,10 +585,9 @@
 @media (max-width: 767px) {
     header { padding: 0.75rem 1rem !important; }
     .status-badge { display: none !important; }
-    .btn-primary.btn-book { display: none !important; }
     nav { display: none !important; }
+    .header-container > div:last-child { display: none !important; }
     .hamburger { display: flex !important; }
-    .header-container { position: relative; }
 }
 @media (min-width: 768px) {
     .hamburger { display: none !important; }
@@ -627,7 +626,14 @@
                 <button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button>
             </div>
         </div>
-    <button class="hamburger" onclick="document.getElementById(chr(39)mobileMenu chr(39)).classList.toggle(chr(39)open chr(39))" aria-label="Menu"><span></span><span></span><span></span></button><button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button><button class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button></header><div class="mobile-menu" id="mobileMenu"><a href="#consulting" onclick="document.getElementById('mobileMenu').classList.remove('open')">Consulting</a><a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a><a href="#pricing" onclick="document.getElementById('mobileMenu').classList.remove('open')">Pricing</a><a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a><button class="btn-mobile-book" onclick="window.location.href='booking.html'">Book Consultation</button></div><div class="mobile-menu" id="mobileMenu"><a href="#consulting">Consulting</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button></div><div class="mobile-menu" id="mobileMenu"><a href="#consulting">Consulting</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><button class="btn-primary" onclick="window.location.href=chr(39)booking.html chr(39)">Book Consultation</button></div>
+    </header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#consulting" onclick="document.getElementById('mobileMenu').classList.remove('open')">Consulting</a>
+  <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
+  <a href="#pricing" onclick="document.getElementById('mobileMenu').classList.remove('open')">Pricing</a>
+  <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
+  <button class="btn-mobile-book" onclick="window.location.href='booking.html'">Book Consultation</button>
+</div>
 
     <!-- Hero -->
     <section id="home" class="hero">
