@@ -608,6 +608,68 @@
 .mobile-menu.open { display: flex !important; }
 .mobile-menu a { color: #94a3b8; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 1rem 0; border-bottom: 1px solid #1e2d3d; display: block; }
 .mobile-menu .btn-mobile-book { width: 100%; text-align: center; margin-top: 1rem; padding: 0.875rem; background: #00d4ff; color: #080c10; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; cursor: pointer; }
+
+.img-card {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+}
+.img-card .card-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    background: linear-gradient(to bottom, rgba(8,12,16,0.55) 0%, rgba(8,12,16,0.92) 60%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.img-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.img-card {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+    min-height: 320px;
+}
+.img-card .card-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    background: linear-gradient(to bottom, rgba(8,12,16,0.4) 0%, rgba(8,12,16,0.93) 55%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.img-card {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+    min-height: 320px;
+}
+.img-card .card-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    background: linear-gradient(to bottom, rgba(8,12,16,0.4) 0%, rgba(8,12,16,0.93) 55%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 </style>
 <link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="favicon.png"><link rel="icon" type="image/x-icon" href="favicon.ico"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="favicon.png"></head>
 <body>
@@ -659,27 +721,8 @@
             <div class="hero-buttons">
                 <button class="btn-primary btn-lg" onclick="window.location.href='booking.html'">Get Started</button>
                 <button class="btn-secondary btn-lg" onclick="document.getElementById('consulting').scrollIntoView({behavior:'smooth'})">Learn More</button>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <!-- Consulting -->
-    <section id="consulting">
-        <div class="section-container">
-            <div class="section-header">
-                <p class="section-label">We automate, you dominate.</p>
-                <h2 class="section-title gradient-text">AI Consulting & Strategy</h2>
-                <p class="section-description">
-                    Partner with us to unlock the full potential of AI for your business.
-                    We help organizations develop comprehensive AI strategies and implement solutions that deliver real results.
-                </p>
-            </div>
-
-            <div class="grid-2">
-                <div class="card" style="animation-delay:0.1s">
-                    <div class="card-icon">🎯</div>
+                <div class="card img-card" style="animation-delay:0.1s;background-image:url('img1.jpg')">
+                    <div class="card-overlay">
                     <h3 class="card-title">AI Strategy & Roadmap</h3>
                     <p class="card-description">Develop a comprehensive AI strategy aligned with your business goals. We create actionable roadmaps that guide your AI transformation journey.</p>
                     <ul class="card-list">
@@ -689,10 +732,10 @@
                         <li>ROI modeling & business case development</li>
                         <li>Change management planning</li>
                     </ul>
+                    </div>
                 </div>
-
-                <div class="card" style="animation-delay:0.2s">
-                    <div class="card-icon">💡</div>
+                <div class="card img-card" style="animation-delay:0.2s;background-image:url('img2.jpg')">
+                    <div class="card-overlay">
                     <h3 class="card-title">AI Advisory & Consulting</h3>
                     <p class="card-description">Expert guidance on AI adoption, implementation, and optimization.</p>
                     <ul class="card-list">
@@ -700,10 +743,10 @@
                         <li>Vendor selection & evaluation</li>
                         <li>AI governance & ethics</li>
                     </ul>
+                    </div>
                 </div>
-
-                <div class="card" style="animation-delay:0.3s">
-                    <div class="card-icon">⚙️</div>
+                <div class="card img-card" style="animation-delay:0.3s;background-image:url('img3.jpg')">
+                    <div class="card-overlay">
                     <h3 class="card-title">Custom AI Solutions</h3>
                     <p class="card-description">Build tailored AI systems that solve your unique business challenges.</p>
                     <ul class="card-list">
@@ -711,10 +754,10 @@
                         <li>Process automation & optimization</li>
                         <li>Predictive analytics</li>
                     </ul>
+                    </div>
                 </div>
-
-                <div class="card" style="animation-delay:0.4s">
-                    <div class="card-icon">📚</div>
+                <div class="card img-card" style="animation-delay:0.4s;background-image:url('img4.jpg')">
+                    <div class="card-overlay">
                     <h3 class="card-title">AI Training & Workshops</h3>
                     <p class="card-description">Upskill your team with hands-on AI training. From executive briefings to technical deep-dives.</p>
                     <ul class="card-list">
@@ -723,9 +766,26 @@
                         <li>Industry-specific AI applications</li>
                         <li>Prompt engineering & LLM best practices</li>
                     </ul>
+                    </div>
                 </div>
-            </div>
-        </div>
+                        <li>Custom AI/ML model development</li>
+                        <li>Process automation & optimization</li>
+                        <li>Predictive analytics</li>
+                    </ul>
+                    </div>
+                </div>
+                <div class="card img-card" style="animation-delay:0.4s;background-image:url('img4.jpg')">
+                    <div class="card-overlay">
+                    <h3 class="card-title">AI Training & Workshops</h3>
+                    <p class="card-description">Upskill your team with hands-on AI training. From executive briefings to technical deep-dives.</p>
+                    <ul class="card-list">
+                        <li>Executive AI strategy workshops</li>
+                        <li>Technical AI/ML training programs</li>
+                        <li>Industry-specific AI applications</li>
+                        <li>Prompt engineering & LLM best practices</li>
+                    </ul>
+                    </div>
+                </div>
     </section>
 
     <hr class="section-divider">
