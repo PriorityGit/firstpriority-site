@@ -821,5 +821,190 @@
             <div class="footer-copyright">© 2025 FirstPriority.AI</div>
         </div>
     </footer>
+<style>
+  #fp-chat-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #00ff9d);
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 24px rgba(0,212,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #fp-chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(0,212,255,0.6); }
+  #fp-chat-btn svg { width: 26px; height: 26px; }
+  #fp-chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 28px;
+    width: 360px;
+    max-height: 520px;
+    background: #0d1117;
+    border: 1px solid #1e2d3d;
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    z-index: 9998;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.6);
+    overflow: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  #fp-chat-window.open { display: flex; }
+  #fp-chat-header {
+    padding: 14px 18px;
+    background: #080c10;
+    border-bottom: 1px solid #1e2d3d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fp-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #a78bfa);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #080c10; flex-shrink: 0;
+  }
+  .fp-header-name { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1; }
+  .fp-header-status { font-size: 10px; color: #00ff9d; margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+  .fp-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00ff9d; box-shadow: 0 0 6px #00ff9d; animation: fp-pulse 2s infinite; }
+  @keyframes fp-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  #fp-chat-close { background: none; border: none; color: #4a6178; cursor: pointer; font-size: 18px; }
+  #fp-chat-close:hover { color: #e2e8f0; }
+  #fp-chat-messages {
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px; max-height: 340px;
+  }
+  #fp-chat-messages::-webkit-scrollbar { width: 4px; }
+  #fp-chat-messages::-webkit-scrollbar-thumb { background: #1e2d3d; border-radius: 2px; }
+  .fp-msg {
+    max-width: 82%; padding: 10px 14px; border-radius: 12px;
+    font-size: 13px; line-height: 1.5; animation: fp-slide 0.2s ease;
+  }
+  @keyframes fp-slide { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .fp-msg.sarah { background: #131920; border: 1px solid #1e2d3d; color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .fp-msg.user { background: linear-gradient(135deg,#00d4ff22,#00ff9d22); border: 1px solid #00d4ff44; color: #e2e8f0; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .fp-typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+  .fp-typing span { width: 6px; height: 6px; border-radius: 50%; background: #00d4ff; animation: fp-bounce 1.2s infinite; }
+  .fp-typing span:nth-child(2){animation-delay:0.2s} .fp-typing span:nth-child(3){animation-delay:0.4s}
+  @keyframes fp-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+  #fp-chat-input-row { padding: 12px; border-top: 1px solid #1e2d3d; display: flex; gap: 8px; background: #080c10; }
+  #fp-chat-input {
+    flex: 1; background: #131920; border: 1px solid #1e2d3d;
+    border-radius: 8px; padding: 9px 12px; color: #e2e8f0;
+    font-size: 13px; outline: none; font-family: inherit; resize: none; height: 38px;
+  }
+  #fp-chat-input:focus { border-color: #00d4ff44; }
+  #fp-chat-input::placeholder { color: #4a6178; }
+  #fp-chat-send {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: linear-gradient(135deg, #00d4ff, #00ff9d);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+  }
+  #fp-chat-send:hover { opacity: 0.85; }
+  #fp-chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  #fp-chat-send svg { width: 16px; height: 16px; }
+</style>
+
+<button id="fp-chat-btn" aria-label="Chat with Sarah">
+  <svg fill="none" stroke="#080c10" stroke-width="2.5" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+  </svg>
+</button>
+
+<div id="fp-chat-window">
+  <div id="fp-chat-header">
+    <div class="fp-avatar">S</div>
+    <div class="fp-header-info">
+      <div class="fp-header-name">Sarah</div>
+      <div class="fp-header-status"><div class="fp-status-dot"></div>AI Agent · FirstPriority AI</div>
+    </div>
+    <button id="fp-chat-close">✕</button>
+  </div>
+  <div id="fp-chat-messages">
+    <div class="fp-msg sarah">Hey! I'm Sarah — FirstPriority AI's agent. Most businesses lose leads to missed calls and slow follow-up. That's what we fix. What can I help you with?</div>
+  </div>
+  <div id="fp-chat-input-row">
+    <textarea id="fp-chat-input" placeholder="Ask me anything..." rows="1"></textarea>
+    <button id="fp-chat-send">
+      <svg fill="none" stroke="#080c10" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const API_URL = "https://remedial-shoptalk-scrap.ngrok-free.dev/api/chat";
+  const history = [];
+  const btn = document.getElementById('fp-chat-btn');
+  const win = document.getElementById('fp-chat-window');
+  const closeBtn = document.getElementById('fp-chat-close');
+  const messages = document.getElementById('fp-chat-messages');
+  const input = document.getElementById('fp-chat-input');
+  const send = document.getElementById('fp-chat-send');
+
+  btn.addEventListener('click', () => { win.classList.toggle('open'); if(win.classList.contains('open')) input.focus(); });
+  closeBtn.addEventListener('click', () => win.classList.remove('open'));
+  input.addEventListener('keydown', (e) => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} });
+  send.addEventListener('click', sendMessage);
+
+  function addMsg(text, role) {
+    const div = document.createElement('div');
+    div.className = 'fp-msg ' + (role==='user'?'user':'sarah');
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'fp-msg sarah fp-typing';
+    div.id = 'fp-typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function hideTyping() { const t=document.getElementById('fp-typing'); if(t) t.remove(); }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    send.disabled = true;
+    addMsg(text, 'user');
+    history.push({ role: 'user', content: text });
+    showTyping();
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+        body: JSON.stringify({ messages: history })
+      });
+      const data = await res.json();
+      const reply = data.reply || "Sorry, try calling us at +1-831-661-9911.";
+      hideTyping();
+      addMsg(reply, 'sarah');
+      history.push({ role: 'assistant', content: reply });
+    } catch(err) {
+      hideTyping();
+      addMsg("Something went wrong. Give us a call at +1-831-661-9911.", 'sarah');
+    }
+    send.disabled = false;
+    input.focus();
+  }
+})();
+</script>
+
 </body>
 </html>
