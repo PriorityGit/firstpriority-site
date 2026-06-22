@@ -95,7 +95,7 @@
         }
 
         .logo {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif;
             font-size: 1.1rem;
             font-weight: 800;
             letter-spacing: -0.02em;
@@ -216,7 +216,7 @@
         }
 
         .hero-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif;
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
             line-height: 1.05;
@@ -337,10 +337,20 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 2rem;
-            transition: all 0.3s;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.6s ease;
             position: relative;
             overflow: hidden;
-            animation: fadeInUp 0.5s ease both;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+        }
+        .reveal.reveal-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1);
         }
 
         .card::before {
@@ -364,8 +374,76 @@
         .card:hover::before { opacity: 1; }
 
         .card-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            line-height: 1;
+            text-align: center;
+            margin: 0 auto 1.25rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.10), rgba(167,139,250,0.07));
+            border: 1px solid var(--border);
+            box-shadow: inset 0 0 22px rgba(0,212,255,0.05);
+            transition: transform 0.35s cubic-bezier(.16,1,.3,1), border-color 0.3s, box-shadow 0.3s;
+        }
+        .card:hover .card-icon {
+            border-color: rgba(0,212,255,0.35);
+            box-shadow: inset 0 0 26px rgba(0,212,255,0.14), 0 0 20px rgba(0,212,255,0.12);
+            transform: translateY(-3px) scale(1.04);
+        }
+
+        /* Drifting accent glow over the grid */
+        .grid-sweep {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(0,212,255,0.05) 0%, transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(167,139,250,0.045) 0%, transparent 42%);
+            animation: gridSweep 16s ease-in-out infinite alternate;
+        }
+        @keyframes gridSweep {
+            0%   { transform: translate(-4%, -3%) scale(1); }
+            100% { transform: translate(5%, 4%) scale(1.08); }
+        }
+
+        /* Pixel intro overlay */
+        #pixel-intro {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #060a0e;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        #pixel-intro .intro-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.28) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.28) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0;
+            transform: scale(1.14);
+            transition: opacity 0.55s ease, transform 0.7s cubic-bezier(.16,1,.3,1);
+        }
+        #pixel-intro .intro-grid.on { opacity: 1; transform: scale(1); }
+        #pixel-intro .ipx {
+            position: absolute;
+            border-radius: 1px;
+            will-change: transform, opacity;
+            box-shadow: 0 0 4px currentColor;
+        }
+        body.intro-active { overflow: hidden; }
+        @media (prefers-reduced-motion: reduce) {
+            .grid-sweep { animation: none; }
+            #pixel-intro { display: none; }
+            .reveal { opacity: 1; transform: none; }
         }
 
         .card-title {
@@ -627,6 +705,8 @@
 </style>
 <link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="favicon.png"><link rel="icon" type="image/x-icon" href="favicon.ico"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="favicon.png"></head>
 <body>
+<div id="pixel-intro" aria-hidden="true"></div>
+<div class="grid-sweep"></div>
 <canvas id="fp-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
 
 
@@ -686,9 +766,9 @@
     <!-- Consulting -->
     <section id="consulting">
         <div class="section-container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <p class="section-label">We automate, you dominate.</p>
-                <h2 class="section-title gradient-text">AI Consulting & Strategy</h2>
+                <h2 class="section-title gradient-text" style="font-family:'Palatino Linotype','Book Antiqua',Palatino,'URW Palladio L',serif;">AI Consulting &amp; Strategy</h2>
                 <p class="section-description">
                     Partner with us to unlock the full potential of AI for your business.
                     We help organizations develop comprehensive AI strategies and implement solutions that deliver real results.
@@ -696,7 +776,7 @@
             </div>
 
             <div class="grid-2">
-                <div class="card" style="animation-delay:0.1s">
+                <div class="card reveal" style="animation-delay:0.1s">
                     <div class="card-icon">🎯</div>
                     <h3 class="card-title">AI Strategy & Roadmap</h3>
                     <p class="card-description">Develop a comprehensive AI strategy aligned with your business goals. We create actionable roadmaps that guide your AI transformation journey.</p>
@@ -709,7 +789,7 @@
                     </ul>
                 </div>
 
-                <div class="card" style="animation-delay:0.2s">
+                <div class="card reveal" style="animation-delay:0.2s">
                     <div class="card-icon">💡</div>
                     <h3 class="card-title">AI Advisory & Consulting</h3>
                     <p class="card-description">Expert guidance on AI adoption, implementation, and optimization.</p>
@@ -720,7 +800,7 @@
                     </ul>
                 </div>
 
-                <div class="card" style="animation-delay:0.3s">
+                <div class="card reveal" style="animation-delay:0.3s">
                     <div class="card-icon">⚙️</div>
                     <h3 class="card-title">Custom AI Solutions</h3>
                     <p class="card-description">Build tailored AI systems that solve your unique business challenges.</p>
@@ -731,7 +811,7 @@
                     </ul>
                 </div>
 
-                <div class="card" style="animation-delay:0.4s">
+                <div class="card reveal" style="animation-delay:0.4s">
                     <div class="card-icon">📚</div>
                     <h3 class="card-title">AI Training & Workshops</h3>
                     <p class="card-description">Upskill your team with hands-on AI training. From executive briefings to technical deep-dives.</p>
@@ -751,49 +831,49 @@
     <!-- Services -->
     <section id="services">
         <div class="section-container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <p class="section-label">What we build</p>
                 <h2 class="section-title gradient-text">AI Services</h2>
                 <p class="section-description">Comprehensive AI solutions tailored to your industry and business needs</p>
             </div>
 
             <div class="grid-3">
-                <div class="card" style="animation-delay:0.1s">
+                <div class="card reveal" style="animation-delay:0.1s">
                     <div class="card-icon">🤖</div>
                     <h3 class="card-title">Machine Learning</h3>
                     <p class="card-description">Custom ML models for prediction, classification, and anomaly detection</p>
                 </div>
-                <div class="card" style="animation-delay:0.15s">
+                <div class="card reveal" style="animation-delay:0.15s">
                     <div class="card-icon">💬</div>
                     <h3 class="card-title">Natural Language Processing</h3>
                     <p class="card-description">Chatbots, sentiment analysis, and document processing solutions</p>
                 </div>
-                <div class="card" style="animation-delay:0.2s">
+                <div class="card reveal" style="animation-delay:0.2s">
                     <div class="card-icon">👁️</div>
                     <h3 class="card-title">Computer Vision</h3>
                     <p class="card-description">Image recognition, object detection, and visual quality control</p>
                 </div>
-                <div class="card" style="animation-delay:0.25s">
+                <div class="card reveal" style="animation-delay:0.25s">
                     <div class="card-icon">📊</div>
                     <h3 class="card-title">Data Analytics</h3>
                     <p class="card-description">Advanced analytics and business intelligence powered by AI</p>
                 </div>
-                <div class="card" style="animation-delay:0.3s">
+                <div class="card reveal" style="animation-delay:0.3s">
                     <div class="card-icon">🔄</div>
                     <h3 class="card-title">Process Automation</h3>
                     <p class="card-description">Intelligent automation to streamline operations and reduce costs</p>
                 </div>
-                <div class="card" style="animation-delay:0.35s">
+                <div class="card reveal" style="animation-delay:0.35s">
                     <div class="card-icon">🎯</div>
                     <h3 class="card-title">Recommendation Systems</h3>
                     <p class="card-description">Personalized recommendations to enhance customer experience</p>
                 </div>
-                <div class="card" style="animation-delay:0.4s">
+                <div class="card reveal" style="animation-delay:0.4s">
                     <div class="card-icon">📞</div>
                     <h3 class="card-title">Call Routing & Dispatch</h3>
                     <p class="card-description">AI voice agents that answer every call, qualify the caller, and route or dispatch to the right person or job in real time — bilingual, 24/7, and never sends a lead to voicemail.</p>
                 </div>
-                <div class="card" style="animation-delay:0.45s">
+                <div class="card reveal" style="animation-delay:0.45s">
                     <div class="card-icon">🧠</div>
                     <h3 class="card-title">Tech Consultation</h3>
                     <p class="card-description">Hands-on technical guidance on your stack, integrations, and automation roadmap — from picking the right tools to wiring them together so your systems actually talk to each other.</p>
@@ -807,7 +887,7 @@
     <!-- CTA -->
     <section id="contact">
         <div class="section-container">
-            <div class="cta-card">
+            <div class="cta-card reveal">
                 <p class="section-label" style="justify-content:center;">Ready to deploy</p>
                 <h2 class="section-title gradient-text">Get Started Today</h2>
                 <p class="section-description" style="margin: 0 auto 2rem; text-align:center;">
@@ -1043,64 +1123,176 @@
 
 
 <script>
+/* ===== Pixel field background ===== */
 (function(){
   const canvas = document.getElementById('fp-particles');
+  if(!canvas) return;
   const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  const COLOR = '0,212,255';
+  let W, H, pixels = [];
+  const PALETTE = ['0,212,255','0,255,157','167,139,250'];
+  const mobile = window.innerWidth < 600;
 
-  function resize() {
+  function resize(){
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
     init();
   }
-
-  function init() {
-    particles = [];
-    const count = Math.floor((W * H) / 10000);
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.4 + 0.3,
-        a: Math.random() * 0.4 + 0.1
-      });
-    }
+  function spawn(){
+    const sz = Math.random() < 0.15 ? 3 : (Math.random() < 0.5 ? 2 : 1);
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-0.5)*0.22, vy: (Math.random()-0.5)*0.22,
+      s: sz, base: Math.random()*0.32 + 0.12,
+      tw: Math.random()*Math.PI*2, tws: Math.random()*0.02 + 0.004,
+      col: PALETTE[Math.random() < 0.78 ? 0 : (Math.random() < 0.5 ? 1 : 2)]
+    };
   }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + COLOR + ',' + p.a + ')';
-      ctx.fill();
-    });
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d < 90) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = 'rgba(' + COLOR + ',' + (0.08 * (1 - d/90)) + ')';
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+  function init(){
+    pixels = [];
+    const density = mobile ? 13000 : 6500;
+    const count = Math.min(mobile ? 95 : 280, Math.floor((W*H)/density));
+    for(let i=0;i<count;i++) pixels.push(spawn());
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of pixels){
+      p.x += p.vx; p.y += p.vy; p.tw += p.tws;
+      if(p.x < -4) p.x = W+4; if(p.x > W+4) p.x = -4;
+      if(p.y < -4) p.y = H+4; if(p.y > H+4) p.y = -4;
+      const a = p.base * (0.55 + 0.45*Math.sin(p.tw));
+      ctx.fillStyle = 'rgba(' + p.col + ',' + a + ')';
+      ctx.fillRect(p.x, p.y, p.s, p.s);
+    }
+    if(!mobile){
+      for(let i=0;i<pixels.length;i++){
+        for(let j=i+1;j<pixels.length;j++){
+          const dx = pixels[i].x - pixels[j].x, dy = pixels[i].y - pixels[j].y;
+          const d2 = dx*dx + dy*dy;
+          if(d2 < 8100){
+            const o = 0.06 * (1 - Math.sqrt(d2)/90);
+            ctx.strokeStyle = 'rgba(0,212,255,' + o + ')';
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(pixels[i].x, pixels[i].y);
+            ctx.lineTo(pixels[j].x, pixels[j].y);
+            ctx.stroke();
+          }
         }
       }
     }
     requestAnimationFrame(draw);
   }
-
   window.addEventListener('resize', resize);
   resize();
   draw();
+})();
+
+/* ===== Pixel intro: grid pops up, then pixels burst out and reveal the site ===== */
+(function(){
+  const intro = document.getElementById('pixel-intro');
+  if(!intro) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ intro.remove(); return; }
+  const mobile = window.innerWidth < 600;
+  const W = window.innerWidth, H = window.innerHeight;
+  const cx = W/2, cy = H/2;
+  document.body.classList.add('intro-active');
+
+  // Phase 1 — the grid pops up
+  const grid = document.createElement('div');
+  grid.className = 'intro-grid';
+  intro.appendChild(grid);
+  requestAnimationFrame(function(){ grid.classList.add('on'); });
+
+  // Phase 2 — scattered pixels fly in and assemble onto the real content, tinted to match it, then dissolve to reveal it
+  function assemble(){
+    const sel = ['.logo span', '.logo', '.logo-mark', 'nav a', 'header .btn-primary', '.status-badge',
+                 '.hero-label', '.hero-title', '.hero-tagline', '.hero-description', '.hero-buttons button'];
+    function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
+    function gradColor(t){ return 'rgb(' + lerp(0,167,t) + ',' + lerp(212,139,t) + ',' + lerp(255,250,t) + ')'; } // cyan -> purple
+    let raw = [];
+    document.querySelectorAll(sel.join(',')).forEach(function(el){
+      const r = el.getBoundingClientRect();
+      if(r.width < 3 || r.height < 3 || r.top > H - 6 || r.bottom < 0) return;
+      const solid = el.classList.contains('btn-primary') || el.classList.contains('logo-mark') || el.tagName === 'BUTTON';
+      const grad = el.classList.contains('gradient-text');
+      const baseCol = solid ? (el.classList.contains('logo-mark') ? '#dbeafe' : '#00d4ff') : getComputedStyle(el).color;
+      const step = solid ? 6 : 5;
+      const size = solid ? 4 : 3;
+      const keep = solid ? 0.95 : 0.8;
+      for(let y = r.top; y < r.bottom; y += step){
+        for(let x = r.left; x < r.right; x += step){
+          if(Math.random() > keep) continue;
+          const col = grad ? gradColor((x - r.left) / Math.max(1, r.width)) : baseCol;
+          raw.push({ x: x, y: y, col: col, size: size });
+        }
+      }
+    });
+    // cap + shuffle for an even fill
+    const MAX = mobile ? 460 : 1200;
+    for(let i = raw.length - 1; i > 0; i--){ const j = (Math.random()*(i+1))|0; const t = raw[i]; raw[i] = raw[j]; raw[j] = t; }
+    if(raw.length > MAX) raw = raw.slice(0, MAX);
+
+    const arr = [];
+    raw.forEach(function(pt){
+      const p = document.createElement('div');
+      p.className = 'ipx';
+      const sx = Math.random() * W, sy = Math.random() * H;
+      p.style.cssText = 'width:'+pt.size+'px;height:'+pt.size+'px;left:'+sx+'px;top:'+sy+'px;background:'+pt.col+';color:'+pt.col+';opacity:0;transform:scale(0.2);';
+      intro.appendChild(p);
+      arr.push({ p: p, dx: pt.x - sx, dy: pt.y - sy });
+    });
+    void intro.offsetWidth;
+    // fly in slowly and snap precisely onto the content
+    arr.forEach(function(o){
+      const delay = Math.random() * 320;
+      o.p.style.transition = 'transform .95s cubic-bezier(.2,.75,.2,1) ' + delay + 'ms, opacity .3s ease ' + delay + 'ms';
+      o.p.style.transform = 'translate(' + o.dx + 'px,' + o.dy + 'px) scale(1)';
+      o.p.style.opacity = '1';
+    });
+    // hold the assembled, color-matched layout, then dissolve to reveal the real site beneath
+    setTimeout(function(){
+      arr.forEach(function(o){ o.p.style.transition = 'opacity .6s ease, transform .6s ease'; o.p.style.opacity = '0'; });
+      grid.style.transition = 'opacity .6s ease'; grid.style.opacity = '0';
+      intro.style.transition = 'opacity .65s ease'; intro.style.opacity = '0';
+      document.body.classList.remove('intro-active');
+    }, 1900);
+    setTimeout(function(){ intro.remove(); }, 2700);
+  }
+  setTimeout(assemble, 520);
+})();
+
+/* ===== Scroll reveal ===== */
+(function(){
+  const items = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    items.forEach(function(el){ el.classList.add('reveal-in'); });
+    return;
+  }
+  document.querySelectorAll('.grid-2, .grid-3').forEach(function(g){
+    g.querySelectorAll('.card').forEach(function(card, i){
+      card.style.transitionDelay = ((i % 4) * 0.07) + 's';
+    });
+  });
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('reveal-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(function(el){ io.observe(el); });
+  // Safety net: never leave content hidden if the observer can't deliver
+  // (e.g. document rendered while hidden / JS hiccup).
+  function showAll(){ items.forEach(function(el){ el.classList.add('reveal-in'); }); }
+  if(document.hidden) showAll();
+  setTimeout(function(){
+    items.forEach(function(el){
+      const r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight + 120) el.classList.add('reveal-in');
+    });
+  }, 2500);
 })();
 </script>
 </body>
