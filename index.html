@@ -970,6 +970,18 @@
     font-family: 'Segoe UI', system-ui, sans-serif;
   }
   #fp-chat-window.open { display: flex; }
+  @media (max-width: 767px) {
+    #fp-chat-window {
+      right: 12px !important;
+      left: auto !important;
+      width: 80vw !important;
+      max-width: 300px !important;
+      max-height: 55vh !important;
+      bottom: 80px !important;
+      border-radius: 14px !important;
+    }
+    #fp-chat-btn { bottom: 20px !important; right: 16px !important; }
+  }
   #fp-chat-header {
     padding: 14px 18px;
     background: #080c10;
