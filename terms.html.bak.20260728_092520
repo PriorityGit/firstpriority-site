@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service | FirstPriority.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c10;
+  --surface: #0d1520;
+  --border: #1e2d3d;
+  --text: #e2e8f0;
+  --muted: #4a6178;
+  --accent: #00d4ff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.7; }
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,12,16,0.95);
+  backdrop-filter: blur(24px);
+}
+.header-container {
+  max-width: 80rem; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.logo-wrap { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.logo { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.logo span { color: var(--accent); }
+.btn-primary {
+  background: var(--accent); color: #080c10;
+  border: none; border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; letter-spacing: 0.03em;
+}
+main {
+  max-width: 52rem; margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+}
+.page-label {
+  font-size: 0.75rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1rem;
+}
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800; margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+.last-updated {
+  font-size: 0.85rem; color: var(--muted);
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem; font-weight: 700;
+  color: var(--accent); margin: 2.5rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+p { color: #94a3b8; margin-bottom: 1rem; font-size: 0.95rem; }
+ul { color: #94a3b8; padding-left: 1.5rem; margin-bottom: 1rem; font-size: 0.95rem; }
+ul li { margin-bottom: 0.4rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 4rem;
+}
+.footer-container {
+  max-width: 80rem; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-text { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+.footer-text span { color: var(--accent); }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { font-size: 0.8rem; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; }
+.footer-links a:hover { color: var(--accent); }
+.footer-copyright { font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }
+@media (max-width: 767px) {
+  header { padding: 0.75rem 1rem; }
+  .btn-primary { display: none; }
+  main { padding: 6rem 1.25rem 3rem; }
+  .footer-container { flex-direction: column; gap: 1rem; text-align: center; }
+  .footer-links { justify-content: center; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <a href="/" class="logo-wrap">
+      <div class="logo">First<span>Priority</span>.ai</div>
+    </a>
+    <button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button>
+  </div>
+</header>
+
+<main>
+  <p class="page-label">Legal</p>
+  <h1>Terms of Service</h1>
+  <p class="last-updated">Last updated: May 2025</p>
+
+  <p>Please read these Terms of Service carefully before using firstpriority.ai or engaging FirstPriority AI's services. By accessing our site or services, you agree to be bound by these terms.</p>
+
+  <h2>Services</h2>
+  <p>FirstPriority AI provides AI consulting, strategy, and automation services to businesses. Our offerings include AI agent deployment, workflow automation, voice and SMS systems, and related consulting engagements. Specific deliverables and timelines are defined in individual service agreements.</p>
+
+  <h2>Use of Our Website</h2>
+  <p>You agree to use this website only for lawful purposes. You may not:</p>
+  <ul>
+    <li>Use the site in any way that violates applicable laws or regulations</li>
+    <li>Attempt to gain unauthorized access to any part of our systems</li>
+    <li>Transmit harmful, offensive, or disruptive content</li>
+    <li>Scrape, copy, or reproduce site content without written permission</li>
+  </ul>
+
+  <h2>AI Agent Interactions</h2>
+  <p>Our platform includes AI-powered agents (voice, SMS, and chat). These agents are designed to assist with business inquiries and automation. Interactions may be recorded for quality assurance. Our AI agents do not provide legal, financial, or medical advice. Always consult a qualified professional for such matters.</p>
+
+  <h2>Intellectual Property</h2>
+  <p>All content on firstpriority.ai — including text, design, graphics, logos, and code — is the property of FirstPriority AI and protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written consent.</p>
+
+  <h2>Client Engagements</h2>
+  <p>Paid consulting engagements are governed by separate service agreements signed between FirstPriority AI and the client. In the absence of a signed agreement, these Terms of Service govern the relationship. All fees, deliverables, and timelines are as agreed upon in writing.</p>
+
+  <h2>Limitation of Liability</h2>
+  <p>To the fullest extent permitted by law, FirstPriority AI shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our website or services. Our total liability shall not exceed the amount paid by you for services in the three months preceding the claim.</p>
+
+  <h2>Disclaimer of Warranties</h2>
+  <p>Our website and services are provided "as is" without warranties of any kind, either express or implied. We do not warrant that our services will be uninterrupted, error-free, or meet your specific requirements.</p>
+
+  <h2>Third-Party Links</h2>
+  <p>Our site may contain links to third-party websites. We are not responsible for the content, privacy practices, or terms of those sites. Accessing third-party links is at your own risk.</p>
+
+  <h2>Governing Law</h2>
+  <p>These Terms of Service are governed by the laws of the State of California, without regard to conflict of law principles. Any disputes shall be resolved in the courts of Monterey County, California.</p>
+
+  <h2>Changes to These Terms</h2>
+  <p>We reserve the right to update these Terms of Service at any time. Continued use of our site or services after changes are posted constitutes acceptance of the updated terms.</p>
+
+  <h2>Contact Us</h2>
+  <p>For questions about these Terms of Service, contact us at <a href="mailto:fprioai@gmail.com">fprioai@gmail.com</a> or call <a href="tel:+18316619911">(831) 661-9911</a>.</p>
+</main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-text">First<span>Priority</span>.ai</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+  <p class="footer-copyright">&copy; 2025 FirstPriority AI. All rights reserved.</p>
+</footer>
+</body>
+</html>
