@@ -965,6 +965,19 @@
                 <p class="section-description" style="margin: 0 auto 2rem; text-align:center;">
                     Ready to transform your business with AI? Schedule a free 15-minute consultation to discuss your needs.
                 </p>
+                <form id="contactForm" style="max-width:32rem;margin:0 auto 2rem;text-align:left;" onsubmit="return submitContactForm(event)">
+                    <input type="text" id="cfName" placeholder="Name" required style="width:100%;margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(13,17,23,0.6);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.95rem;">
+                    <input type="email" id="cfEmail" placeholder="Email" required style="width:100%;margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(13,17,23,0.6);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.95rem;">
+                    <input type="tel" id="cfPhone" placeholder="Phone (optional)" style="width:100%;margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(13,17,23,0.6);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.95rem;">
+                    <textarea id="cfMessage" placeholder="How can we help?" rows="3" style="width:100%;margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(13,17,23,0.6);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.95rem;font-family:inherit;resize:vertical;"></textarea>
+                    <label style="display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:1.25rem;font-size:0.8rem;color:#94a3b8;line-height:1.5;cursor:pointer;">
+                        <input type="checkbox" id="cfSmsConsent" style="margin-top:0.2rem;flex-shrink:0;">
+                        <span>I agree to receive text messages from FirstPriority AI at the number provided. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="privacy.html" style="color:var(--accent);">Privacy Policy</a> and <a href="terms.html" style="color:var(--accent);">Terms</a>.</span>
+                    </label>
+                    <button type="submit" class="btn-primary btn-lg" style="width:100%;">Send Message</button>
+                    <p id="cfStatus" style="margin-top:0.75rem;font-size:0.85rem;text-align:center;"></p>
+                </form>
+                <p style="font-size:0.85rem;color:#64748b;margin-bottom:1rem;">or</p>
                 <button class="btn-primary btn-lg" onclick="window.location.href='booking.html'">Book Free Consultation</button>
             </div>
         </div>
@@ -1413,6 +1426,39 @@
     fpVantaCanvas.style.left = '0';
     fpVantaCanvas.style.zIndex = '1';
   }
+</script>
+<script>
+async function submitContactForm(e){
+  e.preventDefault();
+  const status = document.getElementById('cfStatus');
+  const btn = e.target.querySelector('button[type="submit"]');
+  status.textContent = 'Sending...';
+  status.style.color = '#94a3b8';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://agent.firstpriority.ai/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: document.getElementById('cfName').value,
+        email: document.getElementById('cfEmail').value,
+        phone: document.getElementById('cfPhone').value,
+        message: document.getElementById('cfMessage').value,
+        smsConsent: document.getElementById('cfSmsConsent').checked
+      })
+    });
+    if (!res.ok) throw new Error('failed');
+    status.textContent = 'Thanks — we\'ll be in touch shortly.';
+    status.style.color = 'var(--accent)';
+    document.getElementById('contactForm').reset();
+  } catch (err) {
+    status.textContent = 'Something went wrong. Please email fprioai@gmail.com or call (831) 661-9911.';
+    status.style.color = '#f87171';
+  } finally {
+    btn.disabled = false;
+  }
+  return false;
+}
 </script>
 </body>
 </html>
