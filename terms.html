@@ -31,6 +31,8 @@ header {
 .logo-wrap { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
 .logo { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .logo span { color: var(--accent); }
+.logo-img { height: 36px; width: auto; display: block; }
+@media (max-width: 600px) { .logo-img { height: 28px; } }
 .btn-primary {
   background: var(--accent); color: #080c10;
   border: none; border-radius: 6px;
@@ -98,7 +100,7 @@ footer {
 <header>
   <div class="header-container">
     <a href="/" class="logo-wrap">
-      <div class="logo">First<span>Priority</span>.ai</div>
+      <img class="logo-img" src="logo.png" alt="FirstPriority.ai" width="205" height="36">
     </a>
     <button class="btn-primary" onclick="window.location.href='booking.html'">Book Consultation</button>
   </div>
