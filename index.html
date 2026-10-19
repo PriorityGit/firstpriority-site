@@ -1315,6 +1315,7 @@
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
     init();
+    zActive = [];
   }
   function spawn(){
     const sz = Math.random() < 0.15 ? 3 : (Math.random() < 0.5 ? 2 : 1);
@@ -1359,8 +1360,86 @@
         }
       }
     }
+    drawZodiac();
     requestAnimationFrame(draw);
   }
+
+  /* Zodiac constellations: a few fade in, trace their lines, then hand off to the next sign */
+  const ZODIAC = [
+    { n:'Aries', p:[[.10,.62],[.55,.40],[.75,.45],[.86,.56]], e:[[0,1],[1,2],[2,3]] },
+    { n:'Taurus', p:[[.40,.62],[.30,.48],[.10,.10],[.52,.52],[.70,.30],[.88,.15],[.22,.86]], e:[[0,1],[1,2],[0,3],[3,4],[4,5],[0,6]] },
+    { n:'Gemini', p:[[.25,.08],[.22,.35],[.18,.60],[.12,.90],[.45,.12],[.48,.38],[.55,.62],[.62,.90],[.04,.70],[.74,.72]], e:[[0,1],[1,2],[2,3],[2,8],[4,5],[5,6],[6,7],[6,9],[1,5]] },
+    { n:'Cancer', p:[[.50,.45],[.52,.08],[.18,.88],[.82,.86],[.46,.60]], e:[[0,1],[0,4],[4,2],[0,3]] },
+    { n:'Leo', p:[[.20,.72],[.18,.52],[.28,.38],[.24,.22],[.14,.14],[.06,.26],[.62,.36],[.92,.54],[.60,.64]], e:[[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,7],[7,8],[8,0],[6,8]] },
+    { n:'Virgo', p:[[.12,.20],[.30,.35],[.45,.45],[.62,.40],[.80,.24],[.45,.66],[.56,.92],[.28,.72]], e:[[0,1],[1,2],[2,3],[3,4],[2,5],[5,6],[5,7]] },
+    { n:'Libra', p:[[.50,.08],[.20,.40],[.80,.36],[.25,.82],[.76,.78]], e:[[0,1],[0,2],[1,2],[1,3],[2,4]] },
+    { n:'Scorpio', p:[[.08,.08],[.16,.20],[.06,.34],[.25,.24],[.36,.33],[.44,.43],[.50,.56],[.52,.71],[.58,.84],[.70,.93],[.84,.89],[.91,.77],[.84,.66]], e:[[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]] },
+    { n:'Sagittarius', p:[[.18,.60],[.35,.45],[.55,.45],[.68,.26],[.80,.45],[.86,.72],[.55,.76],[.35,.76]], e:[[0,1],[1,2],[2,3],[3,4],[2,4],[4,5],[5,6],[6,7],[7,0],[1,7],[2,6]] },
+    { n:'Capricorn', p:[[.08,.20],[.20,.30],[.40,.76],[.56,.82],[.80,.50],[.92,.28],[.60,.44]], e:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,1]] },
+    { n:'Aquarius', p:[[.08,.30],[.30,.24],[.45,.36],[.56,.18],[.68,.30],[.50,.60],[.60,.76],[.40,.92],[.78,.88]], e:[[0,1],[1,2],[2,3],[3,4],[2,5],[5,6],[6,7],[6,8]] },
+    { n:'Pisces', p:[[.04,.22],[.12,.08],[.22,.24],[.12,.34],[.55,.88],[.84,.62],[.92,.48],[.96,.66]], e:[[0,1],[1,2],[2,3],[3,0],[2,4],[4,5],[5,6],[6,7],[7,5]] }
+  ];
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const Z_SLOTS = mobile ? 2 : 3;
+  const Z_IN = 180, Z_HOLD = 600, Z_OUT = 180; // frames (~60fps)
+  let zActive = [], zOrder = [], zNext = 0;
+
+  function shuffleZodiac(){
+    zOrder = ZODIAC.map((_, i) => i);
+    for(let i = zOrder.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [zOrder[i], zOrder[j]] = [zOrder[j], zOrder[i]]; }
+    zNext = 0;
+  }
+  function spawnZodiac(stagger){
+    if(zNext >= zOrder.length) shuffleZodiac();
+    const inUse = zActive.map(z => z.sign);
+    let sign = zOrder[zNext++];
+    if(inUse.includes(sign)) { if(zNext >= zOrder.length) shuffleZodiac(); sign = zOrder[zNext++]; }
+    const size = mobile ? 120 : Math.min(230, Math.max(160, W*0.14));
+    let x, y, tries = 0;
+    do {
+      x = Math.random()*(W - size - 40) + 20;
+      y = Math.random()*(H - size - 60) + 20;
+      tries++;
+    } while(tries < 30 && zActive.some(z => Math.abs(z.x - x) < size*1.2 && Math.abs(z.y - y) < size*1.2));
+    return { sign, x, y, size, t: stagger ? -Math.floor(Math.random()*Z_HOLD) : 0, vx: (Math.random()-0.5)*0.06, vy: (Math.random()-0.5)*0.06 };
+  }
+  function drawZodiac(){
+    if(!zActive.length){ shuffleZodiac(); for(let i=0;i<Z_SLOTS;i++) zActive.push(spawnZodiac(i > 0)); }
+    for(let k=0;k<zActive.length;k++){
+      const z = zActive[k];
+      z.t++;
+      if(z.t < 0) continue;
+      if(z.t > Z_IN + Z_HOLD + Z_OUT){ zActive[k] = spawnZodiac(false); continue; }
+      if(!reduceMotion){ z.x += z.vx; z.y += z.vy; }
+      const fade = z.t < Z_IN ? z.t/Z_IN : (z.t > Z_IN + Z_HOLD ? 1 - (z.t - Z_IN - Z_HOLD)/Z_OUT : 1);
+      const trace = reduceMotion ? 1 : Math.min(1, z.t/(Z_IN*1.4));
+      const c = ZODIAC[z.sign];
+      const pt = i => [z.x + c.p[i][0]*z.size, z.y + c.p[i][1]*z.size];
+      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(0,212,255,' + (0.22*fade) + ')';
+      ctx.beginPath();
+      c.e.forEach(([a, b], idx) => {
+        const local = Math.max(0, Math.min(1, trace*c.e.length - idx));
+        if(local <= 0) return;
+        const [ax, ay] = pt(a), [bx, by] = pt(b);
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(ax + (bx-ax)*local, ay + (by-ay)*local);
+      });
+      ctx.stroke();
+      for(let i=0;i<c.p.length;i++){
+        const [sx, sy] = pt(i);
+        const tw = 0.75 + 0.25*Math.sin(z.t*0.05 + i);
+        ctx.fillStyle = 'rgba(0,212,255,' + (0.12*fade*tw) + ')';
+        ctx.fillRect(sx-3, sy-3, 6, 6);
+        ctx.fillStyle = 'rgba(226,240,255,' + (0.75*fade*tw) + ')';
+        ctx.fillRect(sx-1.5, sy-1.5, 3, 3);
+      }
+      ctx.font = '10px "DM Mono", monospace';
+      ctx.fillStyle = 'rgba(0,212,255,' + (0.35*fade) + ')';
+      ctx.fillText(c.n.toUpperCase(), z.x, z.y + z.size + 16);
+    }
+  }
+
   window.addEventListener('resize', resize);
   resize();
   draw();
