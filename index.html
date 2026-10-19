@@ -425,7 +425,7 @@
         .card > .card-photo {
             position: absolute; inset: 0; z-index: 0; pointer-events: none;
             background-size: cover; background-position: center;
-            opacity: 0.3; filter: saturate(0.85) brightness(0.9);
+            opacity: 0.3; filter: saturate(0.8) brightness(0.55);
             -webkit-mask-image:
                 linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%),
                 linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
@@ -436,10 +436,13 @@
             mask-composite: intersect;
             transition: transform 0.7s ease, opacity 0.5s ease;
         }
-        .card:hover > .card-photo { opacity: 0.48; transform: scale(1.06); }
+        .card:hover > .card-photo { opacity: 0.42; transform: scale(1.06); }
         @media (prefers-reduced-motion: reduce) {
             .card:hover > .card-photo { transform: none; }
         }
+        /* Keep card text legible over the photos */
+        .card .card-title { color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.85); }
+        .card .card-description, .card .card-list { color: #c3d0de; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
 
         .card-icon {
             width: 56px;
