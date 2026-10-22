@@ -1311,6 +1311,20 @@
   const PALETTE = ['0,212,255','0,255,157','167,139,250'];
   const mobile = window.innerWidth < 600;
 
+  // zodiac signs live on their own canvas inside the hero (where the Vanta net runs): it scrolls with the
+  // page natively, so nothing has to chase scrollY each frame (that caused jitter while scrolling)
+  const hero = document.getElementById('home');
+  const zc = document.createElement('canvas'), zx = zc.getContext('2d');
+  zc.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+  let ZW = 0, ZH = 0, heroVisible = true;
+  if(hero){
+    hero.insertBefore(zc, hero.firstChild);
+    new IntersectionObserver(es => { heroVisible = es[es.length-1].isIntersecting; }).observe(hero);
+    // keep the backing store matched to the hero; signs already on screen stay where they are
+    new ResizeObserver(() => { if(hero.clientWidth !== ZW || hero.clientHeight !== ZH){ ZW = zc.width = hero.clientWidth; ZH = zc.height = hero.clientHeight; } }).observe(hero);
+    ZW = zc.width = hero.clientWidth; ZH = zc.height = hero.clientHeight;
+  }
+
   function resize(){
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
@@ -1360,7 +1374,7 @@
         }
       }
     }
-    drawZodiac();
+    if(hero) drawZodiac();
     requestAnimationFrame(draw);
   }
 
@@ -1627,21 +1641,22 @@
     const size = Math.round(cell * Z_G);
     let x, y, tries = 0;
     do {
-      x = Math.random()*(W - size - 40) + 20;
-      y = Math.random()*(H - size - 60) + 20;
+      x = 20 + Math.random()*Math.max(0, ZW - size - 40);
+      y = 20 + Math.random()*Math.max(0, ZH - size - 60);
       tries++;
     } while(tries < 30 && zActive.some(z => Math.abs(z.x - x) < size*1.2 && Math.abs(z.y - y) < size*1.2));
-    return { sign, x, y, cell, size, t: stagger ? -Math.floor(Math.random()*Z_END*0.6) : 0, vx: (Math.random()-0.5)*0.06, vy: (Math.random()-0.5)*0.06 };
+    return { sign, x, y, cell, size, t: stagger ? -Math.floor(Math.random()*Z_END*0.6) : 0 }; // no drift: sub-pixel drift snapped to the pixel grid made sprites hop 1px at a time
   }
   function drawZodiac(){
+    zx.clearRect(0, 0, ZW, ZH);
     if(!zActive.length){ shuffleZodiac(); for(let i=0;i<Z_SLOTS;i++) zActive.push(spawnZodiac(i > 0)); }
     for(let k=0;k<zActive.length;k++){
       const z = zActive[k];
       z.t++;
       if(z.t < 0) continue;
       if(z.t > Z_END){ zActive[k] = spawnZodiac(false); continue; }
-      if(!reduceMotion){ z.x += z.vx; z.y += z.vy; }
       const S = signData(z.sign), cell = z.cell, px = Math.max(2, Math.round(cell*0.82)), c1 = Math.round(cell);
+      if(!heroVisible) continue; // keep time moving, skip drawing while the hero is scrolled away
       const ox = Math.round(z.x), oy = Math.round(z.y);
       const at = (gx, gy) => [ox + Math.round(gx*cell), oy + Math.round(gy*cell)];
       const fade = z.t < Z_IN ? z.t/Z_IN : (z.t > Z_END - Z_OUT ? (Z_END - z.t)/Z_OUT : 1);
@@ -1654,26 +1669,26 @@
         const s = S.steps[i];
         if(s.star !== undefined) continue;
         const [sx, sy] = at(s.x, s.y), age = shown - i;
-        ctx.fillStyle = age < 6 ? 'rgba(' + TONES[3] + ',' + (0.75*conA) + ')' : 'rgba(0,212,255,' + (0.3*conA) + ')';
-        ctx.fillRect(sx, sy, px, px);
+        zx.fillStyle = age < 6 ? 'rgba(' + TONES[3] + ',' + (0.75*conA) + ')' : 'rgba(0,212,255,' + (0.3*conA) + ')';
+        zx.fillRect(sx, sy, px, px);
       }
       // stars, flashing gold once a line reaches them; the gold lifts as the finished constellation re-flows
       const goldA = clamp01(1 - morph*2.2) * fade;
       for(let i=0;i<S.stars.length;i++){
         const [sx, sy] = at(S.stars[i][0], S.stars[i][1]);
         const tw = 0.75 + 0.25*Math.sin(z.t*0.05 + i);
-        ctx.fillStyle = 'rgba(0,212,255,' + (0.14*conA*tw) + ')';
-        ctx.fillRect(sx - c1, sy - c1, px + 2*c1, px + 2*c1);
-        ctx.fillStyle = 'rgba(226,240,255,' + (0.8*conA*tw) + ')';
-        ctx.fillRect(sx, sy, px, px);
+        zx.fillStyle = 'rgba(0,212,255,' + (0.14*conA*tw) + ')';
+        zx.fillRect(sx - c1, sy - c1, px + 2*c1, px + 2*c1);
+        zx.fillStyle = 'rgba(226,240,255,' + (0.8*conA*tw) + ')';
+        zx.fillRect(sx, sy, px, px);
         if(S.starStep[i] < shown && goldA > 0){
           const since = shown - S.starStep[i];
           const g = goldA * (since < 8 ? 1 : 0.55 + 0.3*Math.sin(z.t*0.12 + i*1.7));
-          ctx.fillStyle = 'rgba(' + GOLD + ',' + (0.9*g) + ')';
-          ctx.fillRect(sx, sy, px, px);
-          ctx.fillStyle = 'rgba(' + GOLD + ',' + (0.3*g) + ')';
-          ctx.fillRect(sx - c1, sy, px, px); ctx.fillRect(sx + c1, sy, px, px);
-          ctx.fillRect(sx, sy - c1, px, px); ctx.fillRect(sx, sy + c1, px, px);
+          zx.fillStyle = 'rgba(' + GOLD + ',' + (0.9*g) + ')';
+          zx.fillRect(sx, sy, px, px);
+          zx.fillStyle = 'rgba(' + GOLD + ',' + (0.3*g) + ')';
+          zx.fillRect(sx - c1, sy, px, px); zx.fillRect(sx + c1, sy, px, px);
+          zx.fillRect(sx, sy - c1, px, px); zx.fillRect(sx, sy + c1, px, px);
         }
       }
 
@@ -1685,20 +1700,31 @@
           const [sx, sy] = at(p.sx + (p.x - p.sx)*m, p.sy + (p.y - p.sy)*m);
           // cyan glimmer sweeping down the art, like a CRT scanline
           const shimmer = 0.8 + 0.2*Math.sin(z.t*0.06 - p.y*0.45);
-          ctx.fillStyle = 'rgba(' + p.col + ',' + (fade * (0.3 + 0.22*m) * shimmer) + ')';
-          ctx.fillRect(sx, sy, px, px);
+          zx.fillStyle = 'rgba(' + p.col + ',' + (fade * (0.3 + 0.22*m) * shimmer) + ')';
+          zx.fillRect(sx, sy, px, px);
           // gold only on the outline: a soft base plus a glint travelling around the rim
           if(p.rim){
             const g = 0.12 + 0.75*Math.pow(Math.max(0, Math.cos(p.ang - glint)), 12);
-            ctx.fillStyle = 'rgba(' + GOLD + ',' + (fade * m * g) + ')';
-            ctx.fillRect(sx, sy, px, px);
+            zx.fillStyle = 'rgba(' + GOLD + ',' + (fade * m * g) + ')';
+            zx.fillRect(sx, sy, px, px);
           }
         }
       }
 
-      ctx.font = '10px "DM Mono", monospace';
-      ctx.fillStyle = 'rgba(0,212,255,' + (0.35*fade) + ')';
-      ctx.fillText(ZODIAC[z.sign].n.toUpperCase(), ox, oy + z.size + 14);
+      // sign name in the header logo's style: same serif, white blending into the accent cyan,
+      // with a dark halo so it holds up over the starfield
+      const fs = mobile ? 12 : 15, label = ZODIAC[z.sign].n.toUpperCase();
+      zx.font = '800 ' + fs + "px 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif";
+      if('letterSpacing' in zx) zx.letterSpacing = '2px';
+      zx.shadowColor = 'rgba(0,0,0,' + (0.9*fade) + ')'; zx.shadowBlur = 6;
+      const lw = zx.measureText(label).width, grad = zx.createLinearGradient(ox, 0, ox + lw, 0);
+      grad.addColorStop(0, 'rgba(226,232,240,' + (0.95*fade) + ')');
+      grad.addColorStop(0.45, 'rgba(226,232,240,' + (0.95*fade) + ')');
+      grad.addColorStop(1, 'rgba(0,212,255,' + fade + ')');
+      zx.fillStyle = grad;
+      zx.fillText(label, ox, oy + z.size + fs + 6);
+      zx.shadowBlur = 0; zx.shadowColor = 'transparent';
+      if('letterSpacing' in zx) zx.letterSpacing = '0px';
     }
   }
 
