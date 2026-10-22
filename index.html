@@ -1381,8 +1381,62 @@
   ];
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Z_SLOTS = mobile ? 2 : 3;
-  const Z_IN = 180, Z_HOLD = 600, Z_OUT = 180; // frames (~60fps)
+  // frames (~60fps): stars fade in -> lines trace -> stars burst into a 16-bit sprite of the sign -> hold -> fade out
+  const Z_IN = 90, Z_TRACE = 160, Z_BEAT = 30, Z_MORPH = 140, Z_HOLD = 300, Z_OUT = 120;
+  const Z_M0 = Z_IN + Z_TRACE + Z_BEAT, Z_M1 = Z_M0 + Z_MORPH, Z_END = Z_M1 + Z_HOLD + Z_OUT;
   let zActive = [], zOrder = [], zNext = 0;
+
+  /* 16-bit sprites: each sign's glyph (U+2648..U+2653) is rasterised offscreen, cropped and
+     downsampled onto a coarse grid, then shaded with a 3-tone palette like old console art */
+  const Z_GRID = 18;
+  const SHADE = { hi: '150,236,255', mid: '0,212,255', dith: '0,178,236', lo: '128,104,240' };
+  const zSprites = {};
+  function glyphCells(ch){
+    const R = 144, oc = document.createElement('canvas');
+    oc.width = oc.height = R;
+    const o = oc.getContext('2d', { willReadFrequently: true });
+    o.font = (R*0.86) + 'px "Segoe UI Symbol","Apple Symbols","Noto Sans Symbols 2","Noto Sans Symbols","DejaVu Sans",sans-serif';
+    o.textAlign = 'center'; o.textBaseline = 'middle'; o.fillStyle = '#000';
+    o.fillText(ch, R/2, R/2);
+    const d = o.getImageData(0, 0, R, R).data;
+    let x0 = R, y0 = R, x1 = -1, y1 = -1;
+    for(let y=0;y<R;y++) for(let x=0;x<R;x++) if(d[(y*R+x)*4+3] > 60){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+    if(x1 < 0) return null;
+    const span = Math.max(x1-x0+1, y1-y0+1), step = span / Z_GRID;
+    const ox = Math.floor((Z_GRID - (x1-x0+1)/step)/2), oy = Math.floor((Z_GRID - (y1-y0+1)/step)/2);
+    const on = new Set(), cells = [];
+    for(let gy=0; gy<Z_GRID; gy++) for(let gx=0; gx<Z_GRID; gx++){
+      let hit = 0, n = 0;
+      for(let sy=0; sy<3; sy++) for(let sx=0; sx<3; sx++){
+        const px = Math.floor(x0 + (gx + (sx+0.5)/3)*step), py = Math.floor(y0 + (gy + (sy+0.5)/3)*step);
+        if(px <= x1 && py <= y1){ n++; if(d[(py*R+px)*4+3] > 60) hit++; }
+      }
+      if(n && hit/n >= 0.34){ const cx = gx+ox, cy = gy+oy; on.add(cx+','+cy); cells.push([cx, cy]); }
+    }
+    const has = (x, y) => on.has(x+','+y);
+    return cells.map(([x, y]) => ({ x, y,
+      col: (!has(x, y-1) || !has(x-1, y)) ? SHADE.hi : (!has(x, y+1) || !has(x+1, y)) ? SHADE.lo : ((x+y)%2 ? SHADE.dith : SHADE.mid) }));
+  }
+  let zMissing;
+  function spriteFor(sign){
+    if(sign in zSprites) return zSprites[sign];
+    // a font without zodiac glyphs draws its "missing" box; compare against a surely-missing codepoint and skip if so
+    if(zMissing === undefined){ const m = glyphCells('\u{10FFFD}'); zMissing = m ? m.map(c => c.x+','+c.y).join(' ') : ''; }
+    let cells = glyphCells(String.fromCodePoint(0x2648 + sign) + '︎');
+    if(!cells || cells.length < 12 || cells.map(c => c.x+','+c.y).join(' ') === zMissing) cells = null;
+    if(cells){
+      // every pixel flies out of the nearest star of the constellation, nearer ones first
+      const p = ZODIAC[sign].p;
+      for(const c of cells){
+        const nx = (c.x+0.5)/Z_GRID, ny = (c.y+0.5)/Z_GRID;
+        let best = 0, bd = Infinity;
+        p.forEach(([sx, sy], i) => { const dd = (sx-nx)**2 + (sy-ny)**2; if(dd < bd){ bd = dd; best = i; } });
+        c.src = best; c.delay = Math.min(0.4, Math.sqrt(bd)*0.55 + Math.random()*0.1);
+      }
+    }
+    return zSprites[sign] = cells;
+  }
+  const ease = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
 
   function shuffleZodiac(){
     zOrder = ZODIAC.map((_, i) => i);
@@ -1401,7 +1455,7 @@
       y = Math.random()*(H - size - 60) + 20;
       tries++;
     } while(tries < 30 && zActive.some(z => Math.abs(z.x - x) < size*1.2 && Math.abs(z.y - y) < size*1.2));
-    return { sign, x, y, size, t: stagger ? -Math.floor(Math.random()*Z_HOLD) : 0, vx: (Math.random()-0.5)*0.06, vy: (Math.random()-0.5)*0.06 };
+    return { sign, x, y, size, t: stagger ? -Math.floor(Math.random()*Z_END*0.6) : 0, vx: (Math.random()-0.5)*0.06, vy: (Math.random()-0.5)*0.06 };
   }
   function drawZodiac(){
     if(!zActive.length){ shuffleZodiac(); for(let i=0;i<Z_SLOTS;i++) zActive.push(spawnZodiac(i > 0)); }
@@ -1409,14 +1463,18 @@
       const z = zActive[k];
       z.t++;
       if(z.t < 0) continue;
-      if(z.t > Z_IN + Z_HOLD + Z_OUT){ zActive[k] = spawnZodiac(false); continue; }
+      if(z.t > Z_END){ zActive[k] = spawnZodiac(false); continue; }
       if(!reduceMotion){ z.x += z.vx; z.y += z.vy; }
-      const fade = z.t < Z_IN ? z.t/Z_IN : (z.t > Z_IN + Z_HOLD ? 1 - (z.t - Z_IN - Z_HOLD)/Z_OUT : 1);
-      const trace = reduceMotion ? 1 : Math.min(1, z.t/(Z_IN*1.4));
+      const fade = z.t < Z_IN ? z.t/Z_IN : (z.t > Z_END - Z_OUT ? (Z_END - z.t)/Z_OUT : 1);
+      const trace = reduceMotion ? 1 : Math.max(0, Math.min(1, (z.t - Z_IN*0.5)/Z_TRACE));
       const c = ZODIAC[z.sign];
+      const sprite = spriteFor(z.sign);
+      const morph = !sprite ? 0 : reduceMotion ? (z.t >= Z_M0 ? 1 : 0) : Math.max(0, Math.min(1, (z.t - Z_M0)/Z_MORPH));
       const pt = i => [z.x + c.p[i][0]*z.size, z.y + c.p[i][1]*z.size];
+
+      // constellation lines dissolve as the sprite assembles
       ctx.lineWidth = 0.8;
-      ctx.strokeStyle = 'rgba(0,212,255,' + (0.22*fade) + ')';
+      ctx.strokeStyle = 'rgba(0,212,255,' + (0.22*fade*(1 - morph)) + ')';
       ctx.beginPath();
       c.e.forEach(([a, b], idx) => {
         const local = Math.max(0, Math.min(1, trace*c.e.length - idx));
@@ -1426,14 +1484,33 @@
         ctx.lineTo(ax + (bx-ax)*local, ay + (by-ay)*local);
       });
       ctx.stroke();
+
+      // stars dim to a faint glow once their pixels have flown out
+      const starA = fade * (1 - morph*0.8);
       for(let i=0;i<c.p.length;i++){
         const [sx, sy] = pt(i);
         const tw = 0.75 + 0.25*Math.sin(z.t*0.05 + i);
-        ctx.fillStyle = 'rgba(0,212,255,' + (0.12*fade*tw) + ')';
+        ctx.fillStyle = 'rgba(0,212,255,' + (0.12*starA*tw) + ')';
         ctx.fillRect(sx-3, sy-3, 6, 6);
-        ctx.fillStyle = 'rgba(226,240,255,' + (0.75*fade*tw) + ')';
+        ctx.fillStyle = 'rgba(226,240,255,' + (0.75*starA*tw) + ')';
         ctx.fillRect(sx-1.5, sy-1.5, 3, 3);
       }
+
+      if(morph > 0){
+        const cell = z.size / Z_GRID, full = Math.max(2, cell - 1);
+        for(const p of sprite){
+          const m = ease(Math.max(0, Math.min(1, (morph - p.delay) / (1 - p.delay*0.9))));
+          if(m <= 0) continue;
+          const [sx, sy] = pt(p.src);
+          const tx = z.x + p.x*cell, ty = z.y + p.y*cell;
+          const s = 2 + (full - 2)*m;
+          // slow shimmer sweeping down the sprite while it holds, like a CRT scanline
+          const shimmer = 0.85 + 0.15*Math.sin(z.t*0.06 - p.y*0.5);
+          ctx.fillStyle = 'rgba(' + p.col + ',' + (fade * (0.25 + 0.17*m) * shimmer) + ')';
+          ctx.fillRect(Math.round(sx + (tx - sx)*m), Math.round(sy + (ty - sy)*m), Math.round(s), Math.round(s));
+        }
+      }
+
       ctx.font = '10px "DM Mono", monospace';
       ctx.fillStyle = 'rgba(0,212,255,' + (0.35*fade) + ')';
       ctx.fillText(c.n.toUpperCase(), z.x, z.y + z.size + 16);
