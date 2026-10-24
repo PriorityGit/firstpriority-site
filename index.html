@@ -149,7 +149,8 @@
         }
         @media (prefers-reduced-motion: reduce) { nav a { animation: none; } }
 
-        nav a:hover { color: var(--accent); animation: none; }
+        /* Hover overrides the glow without stopping it — restarting the animation would knock that link out of sequence */
+        nav a:hover { color: var(--accent) !important; text-shadow: none !important; }
 
         .btn-primary {
             padding: 0.5rem 1.25rem;
@@ -1077,6 +1078,7 @@
 
             <div class="grid-3">
                 <div class="card reveal" style="animation-delay:0.05s">
+                    <div class="card-photo" style="background-image:url(images/cards/card-seo.webp)" aria-hidden="true"></div>
                     <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><rect class="cm-row" x="40" y="14" width="110" height="20" rx="4"/><path class="ln" d="M50 21 H120 M50 27 H95"/><circle class="node" cx="24" cy="24" r="5"/><rect class="cm-row" x="40" y="44" width="110" height="20" rx="4"/><path class="ln" d="M50 51 H112 M50 57 H90"/><circle class="node" cx="24" cy="54" r="5"/><rect class="cm-row" x="40" y="74" width="110" height="20" rx="4"/><path class="ln" d="M50 81 H104 M50 87 H85"/><circle class="node" cx="24" cy="84" r="5"/><rect class="cm-row" x="40" y="104" width="110" height="20" rx="4"/><path class="ln" d="M50 111 H96 M50 117 H80"/><circle class="node" cx="24" cy="114" r="5"/><rect class="cm-climb" x="40" y="104" width="110" height="20" rx="4"/><circle class="cm-ms" cx="24" cy="24" r="5" style="animation-delay:4.4s"/><g class="cm-mag"><circle cx="172" cy="30" r="14"/><path d="M182 40 L194 52"/></g></svg>
                     <div class="card-icon"><svg viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="SEO &amp; Search Visibility"><defs><linearGradient id="seoIconGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle cx="17" cy="17" r="11" fill="rgba(0,212,255,0.08)" stroke="url(#seoIconGrad)" stroke-width="3"/><path d="M25 25 L35 35" stroke="url(#seoIconGrad)" stroke-width="4" stroke-linecap="round"/><path d="M12 21 V18 M17 21 V14 M22 21 V11" stroke="#00ff9d" stroke-width="2.5" stroke-linecap="round"/></svg></div>
                     <h3 class="card-title">SEO &amp; Search Visibility</h3>
