@@ -553,6 +553,76 @@
             flex-shrink: 0;
         }
 
+        /* Motion graphic in each consulting box: sits bottom-right behind the text, runs only while on screen */
+        .card > .card-motion {
+            position: absolute; z-index: 0; pointer-events: none;
+            right: 0.75rem; bottom: 0.75rem;
+            width: min(52%, 230px); height: auto;
+            opacity: 0.5;
+            -webkit-mask-image: radial-gradient(ellipse at 70% 60%, #000 45%, transparent 80%);
+            mask-image: radial-gradient(ellipse at 70% 60%, #000 45%, transparent 80%);
+            transition: opacity 0.5s ease;
+            overflow: visible;
+        }
+        .card:hover > .card-motion { opacity: 0.85; }
+        .card-motion * { transform-box: fill-box; transform-origin: center; animation-play-state: paused !important; }
+        .card.motion-on .card-motion * { animation-play-state: running !important; }
+        .card-motion .ln  { fill: none; stroke: rgba(0,212,255,0.28); stroke-width: 1.2; }
+        .card-motion .flow { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 8 92; animation: cmFlow 2.4s linear infinite; }
+        .card-motion .flow.alt { stroke: var(--accent3); }
+        .card-motion .flow.grn { stroke: var(--accent2); }
+        .card-motion .node { fill: #0d1117; stroke: var(--accent); stroke-width: 1.5; }
+        .card-motion .blink { animation: cmBlink 3s ease-in-out infinite; }
+        @keyframes cmFlow  { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        @keyframes cmBlink { 0%,100% { fill: #0d1117; filter: none; } 15%,35% { fill: var(--accent); filter: drop-shadow(0 0 4px var(--accent)); } }
+        /* Strategy: roadmap draws itself, milestones light up, target pulses */
+        .cm-route { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 100; animation: cmRoute 6s cubic-bezier(.6,0,.4,1) infinite; }
+        @keyframes cmRoute { 0% { stroke-dashoffset: 100; opacity: 1; } 50%,80% { stroke-dashoffset: 0; opacity: 1; } 95%,100% { stroke-dashoffset: 0; opacity: 0; } }
+        .cm-ms { fill: var(--accent2); opacity: 0.3; animation: cmMs 6s ease-out infinite; }
+        @keyframes cmMs { 0% { opacity: 0.3; transform: scale(1); } 5% { opacity: 1; transform: scale(1.7); } 14%,55% { opacity: 1; transform: scale(1); } 70%,100% { opacity: 0.3; transform: scale(1); } }
+        .cm-ring { fill: none; stroke: var(--accent3); stroke-width: 1.5; animation: cmRing 2.4s ease-out infinite; }
+        @keyframes cmRing { from { transform: scale(0.6); opacity: 0.9; } to { transform: scale(2.4); opacity: 0; } }
+        /* Advisory: hub glows while ideas pulse out to connected nodes */
+        .cm-hub { fill: var(--accent3); animation: cmHub 2.4s ease-in-out infinite; }
+        @keyframes cmHub { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--accent3)); } 50% { transform: scale(1.18); filter: drop-shadow(0 0 9px var(--accent3)); } }
+        /* Custom solutions: meshing gears + live circuit traces */
+        .cm-gear { fill: rgba(0,212,255,0.08); stroke: var(--accent); stroke-width: 1.5; }
+        .cm-gear.cw  { animation: cmSpin 10s linear infinite; }
+        .cm-gear.ccw { stroke: var(--accent3); animation: cmSpin 8s linear infinite reverse; }
+        @keyframes cmSpin { to { transform: rotate(360deg); } }
+        /* Training: activation wave moves through a neural network, layer by layer */
+        /* AI Services boxes are shorter with no list, so keep their graphic smaller and dimmer */
+        .grid-3 .card > .card-motion { width: min(40%, 170px); opacity: 0.38; right: 0.5rem; bottom: 0.5rem; }
+        .grid-3 .card:hover > .card-motion { opacity: 0.8; }
+        /* ML: decision boundary rocks between two classes, points pulse, anomaly ring */
+        .cm-pt { animation: cmPt 2.6s ease-in-out infinite; }
+        @keyframes cmPt { 0%,100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+        .cm-rock { fill: none; stroke: var(--accent2); stroke-width: 1.6; stroke-dasharray: 5 4; animation: cmRock 5s ease-in-out infinite; }
+        @keyframes cmRock { 0%,100% { transform: rotate(-7deg); } 50% { transform: rotate(5deg); } }
+        /* NLP: chat bubbles appear in turn, typing dots bounce */
+        .cm-bub { fill: rgba(0,212,255,0.07); stroke: var(--accent); stroke-width: 1.4; opacity: 0; animation: cmPop 6s ease-out infinite; }
+        .cm-bub.alt { fill: rgba(167,139,250,0.08); stroke: var(--accent3); }
+        @keyframes cmPop { 0% { opacity: 0; transform: scale(0.8); } 6% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 92%,100% { opacity: 0; } }
+        .cm-dot { fill: var(--accent); animation: cmDot 1.2s ease-in-out infinite; }
+        @keyframes cmDot { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+        /* Vision: scan line sweeps, bounding box locks on */
+        .cm-scan { stroke: var(--accent2); stroke-width: 1.5; filter: drop-shadow(0 0 3px var(--accent2)); animation: cmScan 3s ease-in-out infinite alternate; }
+        @keyframes cmScan { from { transform: translateY(0); } to { transform: translateY(104px); } }
+        .cm-lock { fill: none; stroke: var(--accent3); stroke-width: 2; stroke-linecap: round; animation: cmLock 4s ease-out infinite; }
+        @keyframes cmLock { 0% { opacity: 0; transform: scale(1.35); } 20%,70% { opacity: 1; transform: scale(1); } 85%,100% { opacity: 0; transform: scale(1); } }
+        /* Analytics: bars grow from the baseline */
+        .card-motion .cm-bar { fill: rgba(0,212,255,0.18); stroke: var(--accent); stroke-width: 1.2; transform-origin: 50% 100%; animation: cmBar 4s ease-in-out infinite; }
+        @keyframes cmBar { 0%,100% { transform: scaleY(0.2); } 40%,70% { transform: scaleY(1); } }
+        /* Recommendation / tech consult: highlighted boxes */
+        .cm-item { fill: rgba(0,212,255,0.05); stroke: var(--accent3); stroke-width: 1.4; animation: cmItem 3s ease-in-out infinite; }
+        @keyframes cmItem { 0%,100% { fill: rgba(0,212,255,0.05); stroke: var(--accent3); } 20%,40% { fill: rgba(0,212,255,0.3); stroke: var(--accent); } }
+        @media (prefers-reduced-motion: reduce) {
+            .card-motion * { animation: none !important; }
+            .cm-route { stroke-dashoffset: 0; }
+            .cm-ms, .cm-bub { opacity: 1; }
+            .card-motion .flow { stroke-dasharray: none; opacity: 0.4; }
+        }
+
         /* Grid */
         .grid-2 {
             display: grid;
@@ -896,6 +966,7 @@
             <div class="grid-2">
                 <div class="card reveal" style="animation-delay:0.1s">
                     <div class="card-photo" style="background-image:url(images/cards/card-strategy.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M10 120 C50 120 50 80 90 80 S130 40 170 35"/><path class="cm-route" pathLength="100" d="M10 120 C50 120 50 80 90 80 S130 40 170 35"/><circle class="cm-ms" cx="10" cy="120" r="4"/><circle class="cm-ms" cx="50" cy="100" r="4" style="animation-delay:0.75s"/><circle class="cm-ms" cx="90" cy="80" r="4" style="animation-delay:1.5s"/><circle class="cm-ms" cx="130" cy="59.4" r="4" style="animation-delay:2.25s"/><circle class="cm-ring" cx="170" cy="35" r="8"/><circle class="cm-ring" cx="170" cy="35" r="8" style="animation-delay:1.2s"/><circle class="node" cx="170" cy="35" r="7"/><circle cx="170" cy="35" r="2.5" fill="var(--accent2)"/></svg>
                     <div class="card-icon"><img src="icons/icon_target_strategy.png" alt="AI Strategy &amp; Roadmap" width="40" height="40"></div>
                     <h3 class="card-title">AI Strategy & Roadmap</h3>
                     <p class="card-description">Develop a comprehensive AI strategy aligned with your business goals. We create actionable roadmaps that guide your AI transformation journey.</p>
@@ -910,6 +981,7 @@
 
                 <div class="card reveal" style="animation-delay:0.2s">
                     <div class="card-photo" style="background-image:url(images/cards/card-advisory.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M110 72 L28 42"/><path class="ln" d="M110 72 L42 118"/><path class="ln" d="M110 72 L178 30"/><path class="ln" d="M110 72 L184 108"/><path class="ln" d="M110 72 L118 14"/><path class="ln" d="M110 72 L70 20"/><path class="ln" d="M28 42 L70 20 L118 14 L178 30"/><path class="ln" d="M42 118 L28 42"/><path class="ln" d="M178 30 L184 108"/><path class="flow" pathLength="100" d="M110 72 L28 42"/><path class="flow alt" pathLength="100" d="M110 72 L42 118" style="animation-delay:0.4s"/><path class="flow grn" pathLength="100" d="M110 72 L178 30" style="animation-delay:0.8s"/><path class="flow" pathLength="100" d="M110 72 L184 108" style="animation-delay:1.2s"/><path class="flow alt" pathLength="100" d="M110 72 L118 14" style="animation-delay:1.6s"/><path class="flow grn" pathLength="100" d="M110 72 L70 20" style="animation-delay:2.0s"/><circle class="node blink" cx="28" cy="42" r="5" style="animation-delay:0.9s"/><circle class="node blink" cx="42" cy="118" r="5" style="animation-delay:1.3s"/><circle class="node blink" cx="178" cy="30" r="5" style="animation-delay:1.7s"/><circle class="node blink" cx="184" cy="108" r="5" style="animation-delay:2.1s"/><circle class="node blink" cx="118" cy="14" r="5" style="animation-delay:2.5s"/><circle class="node blink" cx="70" cy="20" r="5" style="animation-delay:2.9s"/><circle class="cm-hub" cx="110" cy="72" r="9"/></svg>
                     <div class="card-icon"><img src="icons/icon_lightbulb_advisory.png" alt="AI Advisory &amp; Consulting" width="40" height="40"></div>
                     <h3 class="card-title">AI Advisory & Consulting</h3>
                     <p class="card-description">Expert guidance on AI adoption, implementation, and optimization.</p>
@@ -922,6 +994,7 @@
 
                 <div class="card reveal" style="animation-delay:0.3s">
                     <div class="card-photo" style="background-image:url(images/cards/card-custom.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M0 38 H38 L54 54 H70"/><path class="ln" d="M0 122 H46 L62 106 H72"/><path class="ln" d="M200 128 H186 V112"/><path class="ln" d="M140 0 V20 L150 30"/><path class="flow" pathLength="100" d="M0 38 H38 L54 54 H70"/><path class="flow grn" pathLength="100" d="M0 122 H46 L62 106 H72" style="animation-delay:0.8s"/><path class="flow alt" pathLength="100" d="M200 128 H186 V112" style="animation-delay:1.6s"/><path class="flow" pathLength="100" d="M140 0 V20 L150 30" style="animation-delay:1.2s"/><circle class="node" cx="70" cy="54" r="3"/><circle class="node" cx="72" cy="106" r="3"/><circle class="node" cx="186" cy="112" r="3"/><circle class="node" cx="150" cy="30" r="3"/><g transform="translate(140 72)"><path class="cm-gear cw" d="M24.0 0.0 L29.8 3.4 L28.5 9.3 L21.8 9.9 L19.4 14.1 L22.1 20.3 L17.6 24.3 L11.8 20.9 L7.4 22.8 L6.0 29.4 L0.0 30.0 L-2.7 23.8 L-7.4 22.8 L-12.4 27.3 L-17.6 24.3 L-16.2 17.7 L-19.4 14.1 L-26.1 14.8 L-28.5 9.3 L-23.5 4.8 L-24.0 0.0 L-29.8 -3.4 L-28.5 -9.3 L-21.8 -9.9 L-19.4 -14.1 L-22.1 -20.3 L-17.6 -24.3 L-11.8 -20.9 L-7.4 -22.8 L-6.0 -29.4 L-0.0 -30.0 L2.7 -23.8 L7.4 -22.8 L12.4 -27.3 L17.6 -24.3 L16.2 -17.7 L19.4 -14.1 L26.1 -14.8 L28.5 -9.3 L23.5 -4.8Z"/></g><circle class="node" cx="140" cy="72" r="7"/><g transform="translate(96 86)"><path class="cm-gear ccw" d="M15.0 0.0 L19.8 2.8 L18.5 7.7 L12.9 7.6 L10.6 10.6 L12.0 16.0 L7.7 18.5 L3.7 14.5 L0.0 15.0 L-2.8 19.8 L-7.7 18.5 L-7.6 12.9 L-10.6 10.6 L-16.0 12.0 L-18.5 7.7 L-14.5 3.7 L-15.0 0.0 L-19.8 -2.8 L-18.5 -7.7 L-12.9 -7.6 L-10.6 -10.6 L-12.0 -16.0 L-7.7 -18.5 L-3.7 -14.5 L-0.0 -15.0 L2.8 -19.8 L7.7 -18.5 L7.6 -12.9 L10.6 -10.6 L16.0 -12.0 L18.5 -7.7 L14.5 -3.7Z"/></g><circle class="node" cx="96" cy="86" r="5"/></svg>
                     <div class="card-icon"><img src="icons/icon_gear_custom.png" alt="Custom AI Solutions" width="40" height="40"></div>
                     <h3 class="card-title">Custom AI Solutions</h3>
                     <p class="card-description">Build tailored AI systems that solve your unique business challenges.</p>
@@ -934,6 +1007,7 @@
 
                 <div class="card reveal" style="animation-delay:0.4s">
                     <div class="card-photo" style="background-image:url(images/cards/card-training.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M30 35 L100 20"/><path class="ln" d="M30 35 L100 55"/><path class="ln" d="M30 35 L100 90"/><path class="ln" d="M30 35 L100 125"/><path class="ln" d="M30 70 L100 20"/><path class="ln" d="M30 70 L100 55"/><path class="ln" d="M30 70 L100 90"/><path class="ln" d="M30 70 L100 125"/><path class="ln" d="M30 105 L100 20"/><path class="ln" d="M30 105 L100 55"/><path class="ln" d="M30 105 L100 90"/><path class="ln" d="M30 105 L100 125"/><path class="ln" d="M100 20 L170 50"/><path class="ln" d="M100 20 L170 90"/><path class="ln" d="M100 55 L170 50"/><path class="ln" d="M100 55 L170 90"/><path class="ln" d="M100 90 L170 50"/><path class="ln" d="M100 90 L170 90"/><path class="ln" d="M100 125 L170 50"/><path class="ln" d="M100 125 L170 90"/><path class="flow" pathLength="100" d="M30 35 L100 20"/><path class="flow" pathLength="100" d="M30 70 L100 90" style="animation-delay:0.2s"/><path class="flow" pathLength="100" d="M30 105 L100 20" style="animation-delay:0.4s"/><path class="flow alt" pathLength="100" d="M100 20 L170 90" style="animation-delay:0.6s"/><path class="flow alt" pathLength="100" d="M100 55 L170 90" style="animation-delay:0.8s"/><path class="flow alt" pathLength="100" d="M100 90 L170 90" style="animation-delay:1.0s"/><path class="flow alt" pathLength="100" d="M100 125 L170 90" style="animation-delay:1.2s"/><circle class="node blink" cx="30" cy="35" r="6"/><circle class="node blink" cx="30" cy="70" r="6"/><circle class="node blink" cx="30" cy="105" r="6"/><circle class="node blink" cx="100" cy="20" r="6" style="animation-delay:0.6s"/><circle class="node blink" cx="100" cy="55" r="6" style="animation-delay:0.6s"/><circle class="node blink" cx="100" cy="90" r="6" style="animation-delay:0.6s"/><circle class="node blink" cx="100" cy="125" r="6" style="animation-delay:0.6s"/><circle class="node blink" cx="170" cy="50" r="6" style="animation-delay:1.2s"/><circle class="node blink" cx="170" cy="90" r="6" style="animation-delay:1.2s"/></svg>
                     <div class="card-icon"><img src="icons/icon_book_training.png" alt="AI Training &amp; Workshops" width="40" height="40"></div>
                     <h3 class="card-title">AI Training & Workshops</h3>
                     <p class="card-description">Upskill your team with hands-on AI training. From executive briefings to technical deep-dives.</p>
@@ -962,48 +1036,56 @@
             <div class="grid-3">
                 <div class="card reveal" style="animation-delay:0.1s">
                     <div class="card-photo" style="background-image:url(images/cards/card-ml.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="cm-rock" d="M45 130 L175 20"/><circle class="cm-pt" cx="40" cy="40" r="4" fill="var(--accent)"/><circle class="cm-pt" cx="65" cy="28" r="4" fill="var(--accent)" style="animation-delay:0.3s"/><circle class="cm-pt" cx="35" cy="72" r="4" fill="var(--accent)" style="animation-delay:0.6s"/><circle class="cm-pt" cx="72" cy="58" r="4" fill="var(--accent)" style="animation-delay:0.9s"/><circle class="cm-pt" cx="55" cy="95" r="4" fill="var(--accent)" style="animation-delay:1.2s"/><circle class="cm-pt" cx="95" cy="35" r="4" fill="var(--accent)" style="animation-delay:1.5s"/><circle class="cm-pt" cx="135" cy="105" r="4" fill="var(--accent3)" style="animation-delay:0.15s"/><circle class="cm-pt" cx="158" cy="82" r="4" fill="var(--accent3)" style="animation-delay:0.45s"/><circle class="cm-pt" cx="165" cy="115" r="4" fill="var(--accent3)" style="animation-delay:0.75s"/><circle class="cm-pt" cx="118" cy="124" r="4" fill="var(--accent3)" style="animation-delay:1.05s"/><circle class="cm-pt" cx="182" cy="98" r="4" fill="var(--accent3)" style="animation-delay:1.35s"/><circle class="cm-pt" cx="140" cy="70" r="4" fill="var(--accent3)" style="animation-delay:1.65s"/><circle class="cm-ring" cx="178" cy="30" r="6"/><circle cx="178" cy="30" r="3.5" fill="var(--accent2)"/></svg>
                     <div class="card-icon"><img src="icons/icon_robot_ml.png" alt="Machine Learning" width="40" height="40"></div>
                     <h3 class="card-title">Machine Learning</h3>
                     <p class="card-description">Custom ML models for prediction, classification, and anomaly detection</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.15s">
                     <div class="card-photo" style="background-image:url(images/cards/card-nlp.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><rect class="cm-bub" x="15" y="12" width="110" height="30" rx="12"/><rect class="cm-bub alt" x="75" y="54" width="110" height="30" rx="12" style="animation-delay:1s"/><rect class="cm-bub" x="15" y="96" width="62" height="30" rx="12" style="animation-delay:2s"/><path class="ln" d="M28 24 H100 M28 31 H80 M88 66 H170 M88 73 H150"/><circle class="cm-dot" cx="33" cy="111" r="3"/><circle class="cm-dot" cx="46" cy="111" r="3" style="animation-delay:0.15s"/><circle class="cm-dot" cx="59" cy="111" r="3" style="animation-delay:0.3s"/></svg>
                     <div class="card-icon"><img src="icons/icon_chat_nlp.png" alt="Natural Language Processing" width="40" height="40"></div>
                     <h3 class="card-title">Natural Language Processing</h3>
                     <p class="card-description">Chatbots, sentiment analysis, and document processing solutions</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.2s">
                     <div class="card-photo" style="background-image:url(images/cards/card-vision.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M100 30 L135 50 L135 90 L100 110 L65 90 L65 50 Z M65 50 L100 70 L135 50 M100 70 V110"/><path class="cm-lock" d="M52 38 V26 H64 M136 26 H148 V38 M148 102 V114 H136 M64 114 H52 V102"/><rect class="cm-item" x="52" y="10" width="44" height="12" rx="3"/><line class="cm-scan" x1="40" y1="18" x2="160" y2="18"/></svg>
                     <div class="card-icon"><img src="icons/icon_eye_vision.png" alt="Computer Vision" width="40" height="40"></div>
                     <h3 class="card-title">Computer Vision</h3>
                     <p class="card-description">Image recognition, object detection, and visual quality control</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.25s">
                     <div class="card-photo" style="background-image:url(images/cards/card-analytics.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M15 125 H190"/><rect class="cm-bar" x="22" y="85" width="16" height="40" rx="2"/><rect class="cm-bar" x="50" y="63" width="16" height="62" rx="2" style="animation-delay:0.15s"/><rect class="cm-bar" x="78" y="75" width="16" height="50" rx="2" style="animation-delay:0.3s"/><rect class="cm-bar" x="106" y="47" width="16" height="78" rx="2" style="animation-delay:0.45s"/><rect class="cm-bar" x="134" y="55" width="16" height="70" rx="2" style="animation-delay:0.6s"/><rect class="cm-bar" x="162" y="27" width="16" height="98" rx="2" style="animation-delay:0.75s"/><path class="cm-route" pathLength="100" d="M30 77 L58 55 L86 67 L114 39 L142 47 L170 19"/></svg>
                     <div class="card-icon"><img src="icons/icon_chart_analytics.png" alt="Data Analytics" width="40" height="40"></div>
                     <h3 class="card-title">Data Analytics</h3>
                     <p class="card-description">Advanced analytics and business intelligence powered by AI</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.3s">
                     <div class="card-photo" style="background-image:url(images/cards/card-automation.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><circle class="ln" cx="110" cy="70" r="48"/><circle class="flow" pathLength="100" cx="110" cy="70" r="48"/><circle class="flow alt" pathLength="100" cx="110" cy="70" r="48" style="animation-delay:0.8s"/><circle class="flow grn" pathLength="100" cx="110" cy="70" r="48" style="animation-delay:1.6s"/><circle class="node blink" cx="110" cy="22" r="6"/><circle class="node blink" cx="158" cy="70" r="6" style="animation-delay:0.75s"/><circle class="node blink" cx="110" cy="118" r="6" style="animation-delay:1.5s"/><circle class="node blink" cx="62" cy="70" r="6" style="animation-delay:2.25s"/><g transform="translate(110 70)"><path class="cm-gear ccw" d="M15.0 0.0 L19.8 2.8 L18.5 7.7 L12.9 7.6 L10.6 10.6 L12.0 16.0 L7.7 18.5 L3.7 14.5 L0.0 15.0 L-2.8 19.8 L-7.7 18.5 L-7.6 12.9 L-10.6 10.6 L-16.0 12.0 L-18.5 7.7 L-14.5 3.7 L-15.0 0.0 L-19.8 -2.8 L-18.5 -7.7 L-12.9 -7.6 L-10.6 -10.6 L-12.0 -16.0 L-7.7 -18.5 L-3.7 -14.5 L-0.0 -15.0 L2.8 -19.8 L7.7 -18.5 L7.6 -12.9 L10.6 -10.6 L16.0 -12.0 L18.5 -7.7 L14.5 -3.7Z"/></g><circle class="node" cx="110" cy="70" r="5"/></svg>
                     <div class="card-icon"><img src="icons/icon_refresh_automation.png" alt="Process Automation" width="40" height="40"></div>
                     <h3 class="card-title">Process Automation</h3>
                     <p class="card-description">Intelligent automation to streamline operations and reduce costs</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.35s">
                     <div class="card-photo" style="background-image:url(images/cards/card-recommend.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M40 70 L130 26"/><path class="ln" d="M40 70 L130 70"/><path class="ln" d="M40 70 L130 114"/><path class="flow" pathLength="100" d="M40 70 L130 26"/><path class="flow alt" pathLength="100" d="M40 70 L130 70" style="animation-delay:0.8s"/><path class="flow grn" pathLength="100" d="M40 70 L130 114" style="animation-delay:1.6s"/><rect class="cm-item" x="130" y="12" width="56" height="28" rx="5" style="animation-delay:0.5s"/><rect class="cm-item" x="130" y="56" width="56" height="28" rx="5" style="animation-delay:1.5s"/><rect class="cm-item" x="130" y="100" width="56" height="28" rx="5" style="animation-delay:2.5s"/><circle class="cm-hub" cx="40" cy="70" r="10"/></svg>
                     <div class="card-icon"><img src="icons/icon_target2_recommendation.png" alt="Recommendation Systems" width="40" height="40"></div>
                     <h3 class="card-title">Recommendation Systems</h3>
                     <p class="card-description">Personalized recommendations to enhance customer experience</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.4s">
                     <div class="card-photo" style="background-image:url(images/cards/card-dispatch.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M28 70 H92"/><path class="ln" d="M92 70 L176 22"/><path class="ln" d="M92 70 L184 70"/><path class="ln" d="M92 70 L176 118"/><path class="flow" pathLength="100" d="M28 70 H92"/><path class="flow alt" pathLength="100" d="M92 70 L176 22" style="animation-delay:0.6s"/><path class="flow grn" pathLength="100" d="M92 70 L184 70" style="animation-delay:1.2s"/><path class="flow" pathLength="100" d="M92 70 L176 118" style="animation-delay:1.8s"/><circle class="node blink" cx="176" cy="22" r="6" style="animation-delay:1.2s"/><circle class="node blink" cx="184" cy="70" r="6" style="animation-delay:1.8s"/><circle class="node blink" cx="176" cy="118" r="6" style="animation-delay:2.4s"/><circle class="cm-ring" cx="28" cy="70" r="9"/><circle class="cm-ring" cx="28" cy="70" r="9" style="animation-delay:1.2s"/><circle class="node" cx="28" cy="70" r="8"/><circle cx="28" cy="70" r="3" fill="var(--accent2)"/><circle class="cm-hub" cx="92" cy="70" r="8"/></svg>
                     <div class="card-icon"><img src="icons/icon_headset_callrouting.png" alt="Call Routing &amp; Dispatch" width="40" height="40"></div>
                     <h3 class="card-title">Call Routing & Dispatch</h3>
                     <p class="card-description">AI voice agents that answer every call, qualify the caller, and route or dispatch to the right person or job in real time — bilingual, 24/7, and never sends a lead to voicemail.</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.45s">
                     <div class="card-photo" style="background-image:url(images/cards/card-consult.webp)" aria-hidden="true"></div>
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M40 30 L160 30"/><path class="ln" d="M160 30 L100 115"/><path class="ln" d="M100 115 L40 30"/><path class="flow" pathLength="100" d="M40 30 L160 30"/><path class="flow alt" pathLength="100" d="M160 30 L100 115" style="animation-delay:0.8s"/><path class="flow grn" pathLength="100" d="M100 115 L40 30" style="animation-delay:1.6s"/><rect class="cm-item" x="15" y="15" width="50" height="30" rx="5"/><rect class="cm-item" x="135" y="15" width="50" height="30" rx="5" style="animation-delay:1s"/><rect class="cm-item" x="75" y="100" width="50" height="30" rx="5" style="animation-delay:2s"/><circle class="cm-hub" cx="100" cy="58" r="6"/></svg>
                     <div class="card-icon"><img src="icons/icon_brain_techconsult.png" alt="Tech Consultation" width="40" height="40"></div>
                     <h3 class="card-title">Tech Consultation</h3>
                     <p class="card-description">Hands-on technical guidance on your stack, integrations, and automation roadmap — from picking the right tools to wiring them together so your systems actually talk to each other.</p>
@@ -1806,6 +1888,19 @@
     setTimeout(function(){ intro.remove(); }, 2700);
   }
   setTimeout(assemble, 520);
+})();
+
+/* ===== Card motion graphics: only animate while on screen ===== */
+(function(){
+  const cards = Array.prototype.map.call(document.querySelectorAll('.card-motion'), function(s){ return s.parentElement; });
+  if(!('IntersectionObserver' in window)){
+    cards.forEach(function(c){ c.classList.add('motion-on'); });
+    return;
+  }
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ e.target.classList.toggle('motion-on', e.isIntersecting); });
+  }, { threshold: 0.05 });
+  cards.forEach(function(c){ io.observe(c); });
 })();
 
 /* ===== Scroll reveal ===== */
