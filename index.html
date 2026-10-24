@@ -650,11 +650,6 @@
         @keyframes cmPop { 0% { opacity: 0; transform: scale(0.8); } 6% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 92%,100% { opacity: 0; } }
         .cm-dot { fill: var(--accent); animation: cmDot 1.2s ease-in-out infinite; }
         @keyframes cmDot { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
-        /* Vision: scan line sweeps, bounding box locks on */
-        .cm-scan { stroke: var(--accent2); stroke-width: 1.5; filter: drop-shadow(0 0 3px var(--accent2)); animation: cmScan 3s ease-in-out infinite alternate; }
-        @keyframes cmScan { from { transform: translateY(0); } to { transform: translateY(104px); } }
-        .cm-lock { fill: none; stroke: var(--accent3); stroke-width: 2; stroke-linecap: round; animation: cmLock 4s ease-out infinite; }
-        @keyframes cmLock { 0% { opacity: 0; transform: scale(1.35); } 20%,70% { opacity: 1; transform: scale(1); } 85%,100% { opacity: 0; transform: scale(1); } }
         /* Analytics: bars grow from the baseline */
         .card-motion .cm-bar { fill: rgba(0,212,255,0.18); stroke: var(--accent); stroke-width: 1.2; transform-origin: 50% 100%; animation: cmBar 4s ease-in-out infinite; }
         @keyframes cmBar { 0%,100% { transform: scaleY(0.2); } 40%,70% { transform: scaleY(1); } }
@@ -1100,13 +1095,6 @@
                     <div class="card-icon"><img src="icons/icon_chat_nlp.png" alt="Natural Language Processing" width="40" height="40"></div>
                     <h3 class="card-title">Natural Language Processing</h3>
                     <p class="card-description">Chatbots, sentiment analysis, and document processing solutions</p>
-                </div>
-                <div class="card reveal" style="animation-delay:0.2s">
-                    <div class="card-photo" style="background-image:url(images/cards/card-vision.webp)" aria-hidden="true"></div>
-                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="ln" d="M100 30 L135 50 L135 90 L100 110 L65 90 L65 50 Z M65 50 L100 70 L135 50 M100 70 V110"/><path class="cm-lock" d="M52 38 V26 H64 M136 26 H148 V38 M148 102 V114 H136 M64 114 H52 V102"/><rect class="cm-item" x="52" y="10" width="44" height="12" rx="3"/><line class="cm-scan" x1="40" y1="18" x2="160" y2="18"/></svg>
-                    <div class="card-icon"><img src="icons/icon_eye_vision.png" alt="Computer Vision" width="40" height="40"></div>
-                    <h3 class="card-title">Computer Vision</h3>
-                    <p class="card-description">Image recognition, object detection, and visual quality control</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.25s">
                     <div class="card-photo" style="background-image:url(images/cards/card-analytics.webp)" aria-hidden="true"></div>
