@@ -952,6 +952,10 @@
                 <a href="#try-sarah">Try Sarah</a>
                 <a href="#contact">Contact</a>
             </nav>
+            <!-- must stay before the last div: mobile CSS hides .header-container > div:last-child -->
+            <button class="hamburger" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', document.getElementById('mobileMenu').classList.toggle('open'))">
+                <span></span><span></span><span></span>
+            </button>
             <div style="display:flex;align-items:center;gap:1rem;">
                 <div class="status-badge">
                     <div class="pulse"></div>
