@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FirstPriority AI helps businesses implement AI strategy, automation, and consulting. Expert guidance to transform your operations with artificial intelligence. Serving Monterey County CA and clients nationwide.">
+    <meta name="description" content="FirstPriority AI is a tech, AI and SEO consultancy: AI strategy, automation, and search visibility on Google and AI assistants. Serving Monterey County CA and clients nationwide.">
     <title>FirstPriority.AI | AI Consulting & Strategy</title>
     <link rel="canonical" href="https://firstpriority.ai/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="FirstPriority.AI">
     <meta property="og:url" content="https://firstpriority.ai/">
     <meta property="og:title" content="FirstPriority.AI | AI Consulting & Strategy">
-    <meta property="og:description" content="AI strategy, automation, and live AI phone agents for your business. Serving Monterey County, CA and clients nationwide.">
+    <meta property="og:description" content="Tech, AI &amp; SEO consulting: AI strategy, automation, search visibility, and live AI phone agents. Serving Monterey County, CA and clients nationwide.">
     <meta property="og:image" content="https://firstpriority.ai/images/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="FirstPriority.AI — AI Consulting & Strategy">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="FirstPriority.AI | AI Consulting & Strategy">
-    <meta name="twitter:description" content="AI strategy, automation, and live AI phone agents for your business.">
+    <meta name="twitter:description" content="Tech, AI &amp; SEO consulting: AI strategy, automation, search visibility, and live AI phone agents.">
     <meta name="twitter:image" content="https://firstpriority.ai/images/og-image.png">
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -328,6 +328,17 @@
             text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.6);
         }
 
+        /* "Hear our AI" strip under the hero buttons: promotes Sarah without leading with her */
+        .sarah-strip {
+            display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
+            margin-top: 1.5rem; padding: 0.55rem 1.1rem;
+            background: rgba(0, 255, 157, 0.06); border: 1px solid rgba(0, 255, 157, 0.22); border-radius: 100px;
+            color: var(--text); font-size: 0.85rem; text-decoration: none;
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+        }
+        .sarah-strip strong { color: var(--accent2); font-weight: 600; white-space: nowrap; }
+        .sarah-strip:hover { border-color: rgba(0, 255, 157, 0.5); background: rgba(0, 255, 157, 0.1); box-shadow: 0 0 18px rgba(0, 255, 157, 0.12); }
+
         .hero-buttons {
             display: flex;
             gap: 1rem;
@@ -617,6 +628,12 @@
         .cm-gear.ccw { stroke: var(--accent3); animation: cmSpin 8s linear infinite reverse; }
         @keyframes cmSpin { to { transform: rotate(360deg); } }
         /* Training: activation wave moves through a neural network, layer by layer */
+        /* SEO: highlighted result climbs the rankings while a magnifier scans */
+        .cm-row { fill: rgba(0,212,255,0.05); stroke: rgba(0,212,255,0.35); stroke-width: 1.2; }
+        .cm-climb { fill: rgba(0,255,157,0.2); stroke: var(--accent2); stroke-width: 1.5; filter: drop-shadow(0 0 4px rgba(0,255,157,0.5)); animation: cmClimb 6s cubic-bezier(.6,0,.4,1) infinite; }
+        @keyframes cmClimb { 0% { transform: translateY(0); opacity: 0; } 5%,12% { transform: translateY(0); opacity: 1; } 27%,35% { transform: translateY(-30px); } 50%,58% { transform: translateY(-60px); } 73%,90% { transform: translateY(-90px); opacity: 1; } 100% { transform: translateY(-90px); opacity: 0; } }
+        .cm-mag { fill: none; stroke: var(--accent3); stroke-width: 2.5; stroke-linecap: round; animation: cmMag 4s ease-in-out infinite; }
+        @keyframes cmMag { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-8px,46px); } }
         /* AI Services boxes are shorter with no list, so keep their graphic smaller and dimmer */
         .grid-3 .card > .card-motion { width: min(40%, 170px); opacity: 0.38; right: 0.5rem; bottom: 0.5rem; }
         .grid-3 .card:hover > .card-motion { opacity: 0.8; }
@@ -882,7 +899,7 @@
   "@type": "ProfessionalService",
   "name": "FirstPriority AI",
   "url": "https://firstpriority.ai",
-  "description": "AI consulting, automation, and custom AI solutions for businesses, with a self-hosted, locally-built approach. Serving Monterey County, CA and clients nationwide.",
+  "description": "Tech, AI and SEO consulting, automation, and custom AI solutions for businesses, with a self-hosted, locally-built approach. Serving Monterey County, CA and clients nationwide.",
   "telephone": "+1-831-661-9911",
   "email": "fprioai@gmail.com",
   "address": {
@@ -906,6 +923,8 @@
     "https://www.linkedin.com/in/first-priorityai-188ab1411/"
   ],
   "serviceType": [
+    "SEO & Search Visibility",
+    "AI Search Optimization",
     "AI Strategy & Roadmap",
     "AI Advisory & Consulting",
     "Custom AI Solutions",
@@ -971,6 +990,7 @@
                 <button class="btn-primary btn-lg" onclick="window.location.href='booking.html'">Get Started</button>
                 <button class="btn-secondary btn-lg" onclick="document.getElementById('consulting').scrollIntoView({behavior:'smooth'})">Learn More</button>
             </div>
+            <a class="sarah-strip" href="tel:+18316619911"><span class="pulse"></span>Hear our AI in action: call Sarah, our AI receptionist <strong>(831) 661-9911</strong></a>
         </div>
     </section>
 
@@ -1059,6 +1079,12 @@
             </div>
 
             <div class="grid-3">
+                <div class="card reveal" style="animation-delay:0.05s">
+                    <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><rect class="cm-row" x="40" y="14" width="110" height="20" rx="4"/><path class="ln" d="M50 21 H120 M50 27 H95"/><circle class="node" cx="24" cy="24" r="5"/><rect class="cm-row" x="40" y="44" width="110" height="20" rx="4"/><path class="ln" d="M50 51 H112 M50 57 H90"/><circle class="node" cx="24" cy="54" r="5"/><rect class="cm-row" x="40" y="74" width="110" height="20" rx="4"/><path class="ln" d="M50 81 H104 M50 87 H85"/><circle class="node" cx="24" cy="84" r="5"/><rect class="cm-row" x="40" y="104" width="110" height="20" rx="4"/><path class="ln" d="M50 111 H96 M50 117 H80"/><circle class="node" cx="24" cy="114" r="5"/><rect class="cm-climb" x="40" y="104" width="110" height="20" rx="4"/><circle class="cm-ms" cx="24" cy="24" r="5" style="animation-delay:4.4s"/><g class="cm-mag"><circle cx="172" cy="30" r="14"/><path d="M182 40 L194 52"/></g></svg>
+                    <div class="card-icon"><svg viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="SEO &amp; Search Visibility"><defs><linearGradient id="seoIconGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle cx="17" cy="17" r="11" fill="rgba(0,212,255,0.08)" stroke="url(#seoIconGrad)" stroke-width="3"/><path d="M25 25 L35 35" stroke="url(#seoIconGrad)" stroke-width="4" stroke-linecap="round"/><path d="M12 21 V18 M17 21 V14 M22 21 V11" stroke="#00ff9d" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+                    <h3 class="card-title">SEO &amp; Search Visibility</h3>
+                    <p class="card-description">Technical SEO audits, local SEO &amp; Google Business Profile, and content strategy — plus AI search visibility, so you're recommended by ChatGPT, Gemini, and Perplexity, not just Google.</p>
+                </div>
                 <div class="card reveal" style="animation-delay:0.1s">
                     <div class="card-photo" style="background-image:url(images/cards/card-ml.webp)" aria-hidden="true"></div>
                     <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><path class="cm-rock" d="M45 130 L175 20"/><circle class="cm-pt" cx="40" cy="40" r="4" fill="var(--accent)"/><circle class="cm-pt" cx="65" cy="28" r="4" fill="var(--accent)" style="animation-delay:0.3s"/><circle class="cm-pt" cx="35" cy="72" r="4" fill="var(--accent)" style="animation-delay:0.6s"/><circle class="cm-pt" cx="72" cy="58" r="4" fill="var(--accent)" style="animation-delay:0.9s"/><circle class="cm-pt" cx="55" cy="95" r="4" fill="var(--accent)" style="animation-delay:1.2s"/><circle class="cm-pt" cx="95" cy="35" r="4" fill="var(--accent)" style="animation-delay:1.5s"/><circle class="cm-pt" cx="135" cy="105" r="4" fill="var(--accent3)" style="animation-delay:0.15s"/><circle class="cm-pt" cx="158" cy="82" r="4" fill="var(--accent3)" style="animation-delay:0.45s"/><circle class="cm-pt" cx="165" cy="115" r="4" fill="var(--accent3)" style="animation-delay:0.75s"/><circle class="cm-pt" cx="118" cy="124" r="4" fill="var(--accent3)" style="animation-delay:1.05s"/><circle class="cm-pt" cx="182" cy="98" r="4" fill="var(--accent3)" style="animation-delay:1.35s"/><circle class="cm-pt" cx="140" cy="70" r="4" fill="var(--accent3)" style="animation-delay:1.65s"/><circle class="cm-ring" cx="178" cy="30" r="6"/><circle cx="178" cy="30" r="3.5" fill="var(--accent2)"/></svg>
@@ -1128,11 +1154,17 @@
                 <p class="section-label" style="justify-content:center;">Hear it yourself</p>
                 <h2 class="section-title gradient-text" style="font-family: 'Palatino', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;">Talk to Sarah Right Now</h2>
                 <p class="section-description" style="margin: 0 auto 2rem; text-align:center;">
-                    This isn't a mockup. Call the number below and Sarah — our live AI phone agent — will answer, right now, 24/7.
+                    This isn't a mockup. Call the number below and Sarah — our live AI receptionist — will answer, right now, 24/7.
+                    She's one example of what we build: a bilingual AI agent that answers every call, qualifies the caller, and books or routes the job.
                 </p>
-                <a href="tel:+18316619911" class="btn-primary" style="display:inline-block; font-size:1.25rem; padding:1rem 2.5rem;">
-                    Call (831) 661-9911
-                </a>
+                <div class="hero-buttons">
+                    <a href="tel:+18316619911" class="btn-primary" style="display:inline-block; font-size:1.25rem; padding:1rem 2.5rem;">
+                        Call (831) 661-9911
+                    </a>
+                    <a href="booking.html" class="btn-secondary" style="display:inline-block; font-size:1.05rem; padding:1rem 2rem; text-decoration:none;">
+                        Get one for your business
+                    </a>
+                </div>
             </div>
         </div>
     </section>
