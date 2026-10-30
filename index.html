@@ -1993,7 +1993,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js"></script>
 <script>
-  var fpVantaEffect = VANTA.NET({
+  // Skip the net entirely for visitors who asked for reduced motion; on phones
+  // use fewer points so it's less busy and lighter on battery.
+  var fpReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fpSmallScreen = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+  var fpVantaEffect = fpReduceMotion ? null : VANTA.NET({
     el: "#home",
     mouseControls: true,
     touchControls: true,
@@ -2005,6 +2009,7 @@
     color: 0x00d4ff,
     backgroundColor: 0x080c10,
     backgroundAlpha: 0.0,
+    points: fpSmallScreen ? 6.00 : 10.00,
     maxDistance: 17.00,
     spacing: 20.00
   });
