@@ -67,3 +67,9 @@
   .cs-comet, .cs-ring { display: none; }
   .cs-badge, .cs-start-line, .cs-start-dot, .cs-start-label { transition: none; }
 }
+
+/* Centered layout for the client-results section */
+#results .mc-panel { text-align: center; }
+#results .cs-nums { justify-content: center; }
+#results .cs-legend { justify-content: center; }
+#results .mc-source { text-align: center; }
