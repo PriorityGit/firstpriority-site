@@ -77,6 +77,20 @@
 .mc-source { margin: .75rem auto 0; max-width: 760px; font-size: .72rem; color: var(--muted); line-height: 1.5; }
 .mc-source a { color: var(--muted); }
 
+/* Bridge to consulting: the graph is one example, not the whole offer */
+.mc-bridge {
+  margin: 1.25rem auto 0; max-width: 760px; padding: 1rem 1.25rem;
+  border: 1px solid var(--border); border-radius: 12px; background: rgba(13, 17, 23, 0.4);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .9rem 1.25rem;
+}
+.mc-bridge-text {
+  flex: 1 1 320px; margin: 0; color: var(--muted); line-height: 1.65; font-size: .86rem;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif;
+}
+.mc-bridge-text strong { color: var(--text); font-weight: 700; }
+.mc-bridge-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.mc-bridge-actions a { white-space: nowrap; }
+
 .mc-tip {
   position: fixed; z-index: 1000; pointer-events: none; opacity: 0; transition: opacity .12s;
   background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
