@@ -11,7 +11,7 @@
     { label: 'Profile interactions', color: '#00d4ff', vals: [24, 21, 98, 129, 136], area: true, delay: 0 },
     { label: 'Direction requests',   color: '#00ff9d', vals: [0, 0, 73, 61, 73],     delay: 350 }
   ];
-  var MAX = 160, TICKS = [40, 80, 120, 160];
+  var MAX = 160, TICKS = [40, 80, 120, 160], START = 1; // index into MONTHS
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var NS = 'http://www.w3.org/2000/svg';
   var svg = root.querySelector('.cs-chart svg');
@@ -54,7 +54,7 @@
     el('stop', { offset: 0, 'stop-color': '#00d4ff', 'stop-opacity': 0.35 }, g);
     el('stop', { offset: 1, 'stop-color': '#00d4ff', 'stop-opacity': 0 }, g);
 
-    var split = (x(1) + x(2)) / 2;
+    var split = x(START);  // FirstPriority started with the client in July 2026
     el('rect', { x: L, y: T, width: split - L, height: H - T - B, class: 'cs-zone-before' });
     el('rect', { x: split, y: T, width: W - R - split, height: H - T - B, class: 'cs-zone-after' });
     el('text', { x: (L + split) / 2, y: T - 10, class: 'cs-zone-label', 'text-anchor': 'middle' }).textContent = 'BEFORE';
