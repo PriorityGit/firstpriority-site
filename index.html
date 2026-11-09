@@ -932,6 +932,7 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="missed-calls.css">
 </head>
 <body>
 <div id="pixel-intro" aria-hidden="true"></div>
@@ -993,6 +994,65 @@
                 <button class="btn-secondary btn-lg" onclick="document.getElementById('consulting').scrollIntoView({behavior:'smooth'})">Learn More</button>
             </div>
             <a class="sarah-strip" href="tel:+18316619911"><span class="pulse"></span>Hear our AI in action: call Sarah, our AI receptionist <strong>(831) 661-9911</strong></a>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Why it matters: missed-call data (styles: missed-calls.css, animation: missed-calls.js) -->
+    <section id="why-it-matters">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-label">Why it matters</p>
+                <h2 class="section-title gradient-text" style="font-family:'Palatino Linotype','Book Antiqua',Palatino,'URW Palladio L',serif;">Every Missed Call Is a Missed Customer</h2>
+                <p class="section-description">
+                    When small businesses were tracked for a month, most of their calls never reached a real person.
+                </p>
+            </div>
+
+            <div class="mc-wrap reveal">
+                <div class="mc-panel">
+                    <p class="mc-kicker">Calls that never reached a person</p>
+                    <p class="mc-hero"><span data-count="62">0</span><small>%</small></p>
+                    <p class="mc-hero-sub">Across 85 businesses in 58 industries, about 6 out of every 10 calls went to voicemail or went unanswered.</p>
+
+                    <div class="mc-bar" role="img" aria-label="Business calls: 37.8% answered by a person, 37.8% sent to voicemail, 24.3% not answered at all">
+                        <span class="mc-seg" data-k="answered" tabindex="0"></span>
+                        <span class="mc-seg" data-k="voicemail" tabindex="0"></span>
+                        <span class="mc-seg" data-k="missed" tabindex="0"></span>
+                    </div>
+                    <ul class="mc-legend">
+                        <li><span class="sw" style="background:var(--mc-answered)"></span>Answered by a person<b>37.8%</b></li>
+                        <li><span class="sw" style="background:var(--mc-voicemail)"></span>Sent to voicemail<b>37.8%</b></li>
+                        <li><span class="sw" style="background:var(--mc-missed)"></span>No answer at all<b>24.3%</b></li>
+                    </ul>
+                </div>
+
+                <div class="mc-panel">
+                    <div class="mc-waffle-head">
+                        <div>
+                            <p class="mc-kicker">What 100 calls look like</p>
+                        </div>
+                        <div class="mc-toggle" role="group" aria-label="Compare">
+                            <button type="button" data-mode="typical" aria-pressed="true">Typical business</button>
+                            <button type="button" data-mode="sarah" class="sarah" aria-pressed="false">With Sarah</button>
+                        </div>
+                    </div>
+                    <div class="mc-waffle" aria-hidden="true"></div>
+                    <p class="mc-readout" aria-live="polite"></p>
+                    <ul class="mc-legend" style="margin-top:.5rem">
+                        <li><span class="sw" style="background:var(--mc-answered)"></span>Answered by a person<b></b></li>
+                        <li><span class="sw" style="background:var(--mc-voicemail)"></span>Voicemail<b></b></li>
+                        <li><span class="sw" style="background:var(--mc-missed)"></span>No answer<b></b></li>
+                        <li><span class="sw" style="background:var(--mc-sarah)"></span>Answered by Sarah<b></b></li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="mc-source">
+                Source: 411 Locals study (January 2016), which tracked calls to 85 small businesses across 58 industries over 30 days.
+                Percentages are rounded, so they may not total exactly 100%. Each square represents one call out of 100.
+            </p>
         </div>
     </section>
 
@@ -2053,5 +2113,6 @@ async function submitContactForm(e){
   return false;
 }
 </script>
+<script src="missed-calls.js" defer></script>
 </body>
 </html>
