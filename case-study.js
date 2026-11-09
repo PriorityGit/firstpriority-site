@@ -78,7 +78,16 @@
       var p = {};
       if (s.area) p.area = el('path', { class: 'cs-area', fill: 'url(#csArea)' });
       p.line = el('path', { class: 'cs-line' }); p.line.style.stroke = s.color;
+      // a glowing pulse that keeps traveling along the line, left to right
+      p.comet = el('path', { class: 'cs-comet', pathLength: 100 });
+      p.comet.style.stroke = p.comet.style.color = s.color; p.comet.style.animationDelay = (s.delay / 1000) + 's';
       p.dots = s.vals.map(function (v, i) {
+        var ring = null;
+        if (i > START) {  // results months ripple outward
+          ring = el('circle', { r: 4.5, class: 'cs-ring' });
+          ring.style.stroke = s.color;
+          ring.style.animationDelay = ((i - START - 1) * 0.5 + s.delay / 1000) + 's';
+        }
         var d = el('circle', { r: 4.5, class: 'cs-dot' }); d.style.stroke = s.color;
         var hit = el('circle', { r: 14, class: 'cs-hit', tabindex: 0 });
         var html = '<b>' + MONTHS[i] + ' 2026</b>' + s.label + ': ' + v;
@@ -86,7 +95,7 @@
         hit.addEventListener('focus', function (e) { showTip(e, html); });
         hit.addEventListener('mouseleave', hideTip);
         hit.addEventListener('blur', hideTip);
-        return { dot: d, hit: hit };
+        return { dot: d, hit: hit, ring: ring };
       });
       return p;
     });
@@ -98,20 +107,25 @@
       var v = shown[si], p = parts[si];
       var pts = v.map(function (val, i) { return x(i).toFixed(1) + ',' + y(val).toFixed(1); });
       p.line.setAttribute('d', 'M' + pts.join(' L'));
+      p.comet.setAttribute('d', 'M' + pts.join(' L'));
       if (p.area) p.area.setAttribute('d', 'M' + x(0) + ',' + y(0) + ' L' + pts.join(' L') + ' L' + x(v.length - 1) + ',' + y(0) + ' Z');
       p.dots.forEach(function (d, i) {
         d.dot.setAttribute('cx', x(i)); d.dot.setAttribute('cy', y(v[i]));
         d.hit.setAttribute('cx', x(i)); d.hit.setAttribute('cy', y(v[i]));
+        if (d.ring) { d.ring.setAttribute('cx', x(i)); d.ring.setAttribute('cy', y(v[i])); }
       });
     });
   }
 
   // ---- the climb: each point rises from the baseline, sweeping left to right ----
+  var climbTok = 0;
   function climb() {
-    var t0 = null, STAGGER = 220, DUR = 900, LEAD = reduce ? 0 : 500;
+    var t0 = null, STAGGER = 220, DUR = 900, LEAD = reduce ? 0 : 500, tok = ++climbTok;
+    root.classList.remove('cs-live');
     var total = 500 + DUR + STAGGER * (MONTHS.length - 1) + 350;
     function ease(p) { return 1 - Math.pow(1 - p, 3); }
     function step(t) {
+      if (tok !== climbTok) return;
       if (!t0) t0 = t;
       var el2 = t - t0;
       SERIES.forEach(function (s, si) {
@@ -122,6 +136,7 @@
       });
       render();
       if (el2 < total) requestAnimationFrame(step);
+      else root.classList.add('cs-live');
     }
     if (reduce) { shown = SERIES.map(function (s) { return s.vals.slice(); }); render(); }
     else requestAnimationFrame(step);
@@ -146,14 +161,22 @@
     rt = setTimeout(function () { if (Math.abs(svg.parentNode.clientWidth - 2 - W) > 24) build(); }, 150);
   });
   function start() {
-    if (started) return; started = true;
+    started = true;
     root.classList.add('cs-go');
     climb();
     root.querySelectorAll('[data-count]').forEach(countUp);
   }
+  // Plays every time the chart scrolls back into view (once for reduced-motion visitors).
+  var away = true;
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) {
-      if (es.some(function (e) { return e.isIntersecting; })) { start(); io.disconnect(); }
+      var vis = es[es.length - 1].isIntersecting;
+      if (vis && away && !(reduce && started)) start();
+      if (!vis && started && !reduce) {  // reset off-screen so the replay starts from the baseline
+        climbTok++; root.classList.remove('cs-live');
+        shown = SERIES.map(function () { return [0, 0, 0, 0, 0]; }); render();
+      }
+      away = !vis;
     }, { threshold: 0.3 });
     io.observe(root.querySelector('.cs-chart'));
   } else start();

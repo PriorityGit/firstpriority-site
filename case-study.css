@@ -46,11 +46,24 @@
 .cs-go .cs-start-dot, .cs-go .cs-start-label { opacity: 1; }
 .cs-line { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
 .cs-dot { fill: var(--surface); stroke-width: 2; }
+/* Ongoing motion once the climb finishes (.cs-live) */
+.cs-comet {
+  fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 7 93; stroke-dashoffset: 100;
+  opacity: 0; filter: drop-shadow(0 0 4px currentColor);
+}
+.cs-live .cs-comet { opacity: .9; animation: cs-comet 3.2s linear infinite; }
+@keyframes cs-comet { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+.cs-ring { fill: none; stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.cs-live .cs-ring { animation: cs-ripple 2.4s ease-out infinite; }
+@keyframes cs-ripple { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(3.6); opacity: 0; } }
+.cs-live .cs-area { animation: cs-breathe 4s ease-in-out infinite; }
+@keyframes cs-breathe { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
 .cs-hit { fill: transparent; outline: none; }
 .cs-legend { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin-top: .6rem; }
 .cs-legend li { grid-template-columns: 12px auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  .cs-up { animation: none; }
+  .cs-up, .cs-comet, .cs-ring, .cs-area { animation: none !important; }
+  .cs-comet, .cs-ring { display: none; }
   .cs-badge, .cs-start-line, .cs-start-dot, .cs-start-label { transition: none; }
 }
