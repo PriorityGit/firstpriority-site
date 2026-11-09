@@ -76,29 +76,65 @@
   var TYPICAL = 'Out of every 100 calls, about <strong>62 never reach a person</strong>. Each one is a customer who may call your competitor next.';
   var SARAH = 'With Sarah, <strong>all 100 get answered</strong>: she books appointments, takes messages and sends you the lead, 24/7.';
 
-  function fillTypical(animate) {
-    cells.forEach(function (c, i) {
-      c.dataset.k = c.dataset.base;
-      if (animate && !reduce) setTimeout(function () { c.classList.add('on'); }, i * 18);
-      else c.classList.add('on');
-    });
-    readout.innerHTML = TYPICAL;
-  }
-  function fillSarah() {
-    var missedIdx = 0;
-    cells.forEach(function (c) {
-      if (c.dataset.base === 'answered') return;
-      var delay = reduce ? 0 : (missedIdx++) * 22;
-      setTimeout(function () { c.dataset.k = 'sarah'; }, delay);
-    });
-    readout.innerHTML = SARAH;
+  // Unanswered calls blink like a ringing phone, each on its own beat.
+  cells.forEach(function (c) { c.style.animationDelay = (Math.random() * 1.6).toFixed(2) + 's'; });
+
+  // Waffle legend counts tick between modes.
+  var wLegend = waffle.parentNode.querySelectorAll('.mc-legend b');
+  var COUNTS = { typical: [38, 38, 24, 0], sarah: [38, 0, 0, 62] };
+  var shown = [0, 0, 0, 0], countTok = 0;
+  function setCounts(mode) {
+    var to = COUNTS[mode], from = shown.slice(), t0 = null, dur = reduce ? 0 : 900, tok = ++countTok;
+    function step(t) {
+      if (tok !== countTok) return;
+      if (!t0) t0 = t;
+      var p = dur ? Math.min(1, (t - t0) / dur) : 1;
+      for (var i = 0; i < wLegend.length; i++) {
+        shown[i] = Math.round(from[i] + (to[i] - from[i]) * p);
+        wLegend[i].textContent = shown[i];
+      }
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   }
 
+  var pending = [];
+  function later(fn, ms) { pending.push(setTimeout(fn, reduce ? 0 : ms)); }
+  function clearPending() { pending.forEach(clearTimeout); pending = []; }
+
   var btns = root.querySelectorAll('.mc-toggle button');
+  var mode = 'typical';
+  function setMode(m, intro) {
+    mode = m; clearPending();
+    var n = 0;
+    cells.forEach(function (c, i) {
+      if (intro) { c.dataset.k = c.dataset.base; later(function () { c.classList.add('on'); }, i * 18); return; }
+      c.classList.add('on');
+      if (c.dataset.base === 'answered') return;
+      var k = m === 'sarah' ? 'sarah' : c.dataset.base;
+      if (c.dataset.k !== k) later(function () { c.dataset.k = k; }, (n++) * 22);
+    });
+    readout.innerHTML = m === 'sarah' ? SARAH : TYPICAL;
+    btns.forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.mode === m ? 'true' : 'false'); });
+    setCounts(m);
+  }
+
+  // Autoplay: flip between "Typical" and "With Sarah" while visible, until the visitor takes over.
+  var auto = !reduce, inView = false, autoTimer = null;
+  readout.setAttribute('aria-live', 'off');
+  function scheduleAuto(ms) {
+    clearTimeout(autoTimer);
+    if (!auto || !inView) return;
+    autoTimer = setTimeout(function () {
+      setMode(mode === 'typical' ? 'sarah' : 'typical');
+      scheduleAuto(mode === 'sarah' ? 5000 : 4500);
+    }, ms);
+  }
   btns.forEach(function (b) {
     b.addEventListener('click', function () {
-      btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      if (b.dataset.mode === 'sarah') fillSarah(); else fillTypical(false);
+      auto = false; clearTimeout(autoTimer);
+      readout.setAttribute('aria-live', 'polite');
+      setMode(b.dataset.mode);
     });
   });
 
@@ -111,12 +147,16 @@
       setTimeout(function () { s.style.width = d.pct + '%'; }, reduce ? 0 : i * 250);
     });
     countUp();
-    fillTypical(true);
+    setMode('typical', true);
+    scheduleAuto(4500);
   }
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) {
-      if (es.some(function (e) { return e.isIntersecting; })) { start(); io.disconnect(); }
+      inView = es[es.length - 1].isIntersecting;
+      if (inView && !started) start();
+      else if (inView) scheduleAuto(2500);
+      else clearTimeout(autoTimer);
     }, { threshold: 0.25 });
     io.observe(root);
-  } else start();
+  } else { inView = true; start(); }
 })();

@@ -66,6 +66,10 @@
 .mc-cell[data-k="missed"].on    { background: var(--mc-missed); }
 .mc-cell[data-k="sarah"].on     { background: var(--mc-sarah); box-shadow: 0 0 10px rgba(0,212,255,.45); }
 .mc-cell:hover { transform: scale(1.18); }
+.mc-cell[data-k="missed"].on { animation: mc-ring 1.6s ease-in-out infinite; }
+.mc-cell[data-k="sarah"].on  { animation: mc-pop .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes mc-ring { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes mc-pop  { 0% { transform: scale(1); } 45% { transform: scale(1.35); } 100% { transform: scale(1); } }
 
 .mc-readout { font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif; min-height: 3em; font-size: .82rem; line-height: 1.6; color: var(--text); }
 .mc-readout strong { color: var(--mc-sarah); font-weight: 500; }
@@ -84,5 +88,5 @@
 .mc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
-  .mc-seg, .mc-cell { transition: none; }
+  .mc-seg, .mc-cell { transition: none; animation: none !important; }
 }
