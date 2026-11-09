@@ -107,7 +107,9 @@
 
 /* Centered layout for the whole missed-call section */
 #why-it-matters .mc-panel { text-align: center; }
-#why-it-matters .mc-legend { max-width: 280px; margin-left: auto; margin-right: auto; text-align: left; }
+#why-it-matters .mc-legend { width: fit-content; min-width: 220px; max-width: 100%; margin-left: auto; margin-right: auto; text-align: left; }
+#why-it-matters .mc-legend li { column-gap: .75rem; }
+#why-it-matters .mc-legend b { padding-left: 1.25rem; }
 #why-it-matters .mc-waffle-head { flex-direction: column; align-items: center; gap: .6rem; }
 #why-it-matters .mc-waffle { margin-left: auto; margin-right: auto; }
 #why-it-matters .mc-source { text-align: center; }
