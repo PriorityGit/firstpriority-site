@@ -933,6 +933,7 @@
 }
 </script>
 <link rel="stylesheet" href="missed-calls.css">
+<link rel="stylesheet" href="case-study.css">
 </head>
 <body>
 <div id="pixel-intro" aria-hidden="true"></div>
@@ -1065,6 +1066,50 @@
                     <a href="#try-sarah" class="btn-secondary">Hear Sarah answer</a>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Client results: Google Business Profile before/after (styles: case-study.css, chart: case-study.js) -->
+    <section id="results">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-label">Client results</p>
+                <h2 class="section-title gradient-text" style="font-family:'Palatino Linotype','Book Antiqua',Palatino,'URW Palladio L',serif;">More Customers Finding Them</h2>
+                <p class="section-description">
+                    A local towing company's Google Business Profile, before and after FirstPriority started working with them.
+                </p>
+            </div>
+
+            <div class="cs-wrap reveal">
+                <div class="cs-stats">
+                    <div class="mc-panel">
+                        <p class="mc-kicker">Profile interactions per month</p>
+                        <p class="cs-nums"><span class="cs-before">23</span><span class="cs-arrow" aria-label="to">&rarr;</span><span class="cs-after" data-count="121">0</span><span class="cs-unit">/ mo</span></p>
+                        <p class="cs-badge cyan"><span class="cs-up" aria-hidden="true">&#9650;</span>5.4&times; more</p>
+                    </div>
+                    <div class="mc-panel">
+                        <p class="mc-kicker">Direction requests per month</p>
+                        <p class="cs-nums"><span class="cs-before">0</span><span class="cs-arrow" aria-label="to">&rarr;</span><span class="cs-after" data-count="69">0</span><span class="cs-unit">/ mo</span></p>
+                        <p class="cs-badge"><span class="cs-up" aria-hidden="true">&#9650;</span>From none to 69 a month</p>
+                    </div>
+                </div>
+
+                <div class="mc-panel cs-chart">
+                    <p class="mc-kicker">Monthly activity, June to October 2026</p>
+                    <svg role="img" aria-label="Line chart. Profile interactions: 24 in June, 21 in July, then 98 in August, 129 in September and 136 in October. Direction requests: 0 in June and July, then 73 in August, 61 in September and 73 in October."></svg>
+                    <ul class="mc-legend cs-legend">
+                        <li><span class="sw" style="background:#00d4ff"></span>Profile interactions</li>
+                        <li><span class="sw" style="background:#00ff9d"></span>Direction requests</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="mc-source">
+                Source: the client's Google Business Profile performance data (business name withheld). Before = June&ndash;July 2026, after = August&ndash;October 2026.
+                Totals over the five months: 408 profile interactions and 207 direction requests. November is left out because the month is still in progress.
+            </p>
         </div>
     </section>
 
@@ -2126,5 +2171,6 @@ async function submitContactForm(e){
 }
 </script>
 <script src="missed-calls.js" defer></script>
+<script src="case-study.js" defer></script>
 </body>
 </html>
