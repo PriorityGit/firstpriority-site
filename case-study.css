@@ -36,7 +36,14 @@
 .cs-zone-after  { fill: rgba(0, 212, 255, .045); }
 .cs-zone-label { fill: var(--muted); font-size: 10px; letter-spacing: .14em; font-family: 'DM Mono', monospace; }
 .cs-zone-label.after { fill: var(--accent); }
-.cs-split { stroke: var(--muted); stroke-dasharray: 3 4; }
+.cs-start-line { stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .7s ease-out; }
+.cs-start-dot { fill: #a78bfa; opacity: 0; transition: opacity .3s .6s; }
+.cs-start-label {
+  fill: #a78bfa; font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace;
+  opacity: 0; transition: opacity .4s .7s;
+}
+.cs-go .cs-start-line { stroke-dashoffset: 0; }
+.cs-go .cs-start-dot, .cs-go .cs-start-label { opacity: 1; }
 .cs-line { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
 .cs-dot { fill: var(--surface); stroke-width: 2; }
 .cs-hit { fill: transparent; outline: none; }
@@ -45,5 +52,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cs-up { animation: none; }
-  .cs-badge { transition: none; }
+  .cs-badge, .cs-start-line, .cs-start-dot, .cs-start-label { transition: none; }
 }

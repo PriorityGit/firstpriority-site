@@ -68,7 +68,11 @@
     MONTHS.forEach(function (m, i) {
       el('text', { x: x(i), y: H - 8, class: 'cs-axis', 'text-anchor': i === 0 ? 'start' : i === MONTHS.length - 1 ? 'end' : 'middle' }).textContent = m;
     });
-    el('line', { x1: split, x2: split, y1: T - 4, y2: H - B, class: 'cs-split' });
+    // "FirstPriority starts" marker: the line draws upward, then its label fades in.
+    var mk = el('g', { class: 'cs-start' });
+    el('line', { x1: split, x2: split, y1: H - B, y2: T + 2, pathLength: 100, class: 'cs-start-line' }, mk);
+    el('circle', { cx: split, cy: T + 2, r: 3.5, class: 'cs-start-dot' }, mk);
+    el('text', { x: split + 8, y: T + 6, class: 'cs-start-label' }, mk).textContent = 'FirstPriority starts';
 
     parts = SERIES.map(function (s) {
       var p = {};
@@ -104,15 +108,15 @@
 
   // ---- the climb: each point rises from the baseline, sweeping left to right ----
   function climb() {
-    var t0 = null, STAGGER = 220, DUR = 900;
-    var total = DUR + STAGGER * (MONTHS.length - 1) + 350;
+    var t0 = null, STAGGER = 220, DUR = 900, LEAD = reduce ? 0 : 500;
+    var total = 500 + DUR + STAGGER * (MONTHS.length - 1) + 350;
     function ease(p) { return 1 - Math.pow(1 - p, 3); }
     function step(t) {
       if (!t0) t0 = t;
       var el2 = t - t0;
       SERIES.forEach(function (s, si) {
         s.vals.forEach(function (target, i) {
-          var p = Math.max(0, Math.min(1, (el2 - s.delay - i * STAGGER) / DUR));
+          var p = Math.max(0, Math.min(1, (el2 - LEAD - s.delay - i * STAGGER) / DUR));
           shown[si][i] = target * ease(p);
         });
       });
