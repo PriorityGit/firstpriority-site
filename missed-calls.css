@@ -116,3 +116,14 @@
 .mc-bridge { flex-direction: column; text-align: center; }
 .mc-bridge-text { flex: none; }
 .mc-bridge-actions { justify-content: center; }
+
+/* Book Now: same sweeping light band as the headings (hero-shine keyframes in index.html), over the solid button fill. */
+.btn-shine {
+  background-image:
+    linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, .85) 50%, transparent 60%),
+    linear-gradient(var(--accent), var(--accent));
+  background-size: 250% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: hero-shine 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .btn-shine { animation: none; background-position: 150% 0, 0 0; } }
