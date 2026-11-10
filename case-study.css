@@ -1,6 +1,6 @@
 /* Client-results section (case-study.js). Reuses .mc-panel/.mc-kicker/.mc-legend/.mc-tip/.mc-source
    from missed-calls.css. Cyan = profile interactions, green = direction requests. */
-.cs-wrap { display: grid; gap: .875rem; margin: 1.25rem auto 0; max-width: 760px; }
+.cs-wrap { display: grid; gap: .875rem; margin: 1.25rem auto 0; max-width: 960px; }
 .cs-stats { display: grid; gap: .875rem; }
 @media (min-width: 600px) { .cs-stats { grid-template-columns: 1fr 1fr; } }
 
