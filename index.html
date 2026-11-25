@@ -527,37 +527,8 @@
             100% { transform: translate(5%, 4%) scale(1.08); }
         }
 
-        /* Pixel intro overlay */
-        #pixel-intro {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #060a0e;
-            overflow: hidden;
-            pointer-events: none;
-        }
-        #pixel-intro .intro-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0,212,255,0.28) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,212,255,0.28) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0;
-            transform: scale(1.14);
-            transition: opacity 0.55s ease, transform 0.7s cubic-bezier(.16,1,.3,1);
-        }
-        #pixel-intro .intro-grid.on { opacity: 1; transform: scale(1); }
-        #pixel-intro .ipx {
-            position: absolute;
-            border-radius: 1px;
-            will-change: transform, opacity;
-            box-shadow: 0 0 4px currentColor;
-        }
-        body.intro-active { overflow: hidden; }
         @media (prefers-reduced-motion: reduce) {
             .grid-sweep { animation: none; }
-            #pixel-intro { display: none; }
             .reveal { opacity: 1; transform: none; }
         }
 
@@ -970,7 +941,6 @@
 <link rel="stylesheet" href="case-study.css?v=20261109f">
 </head>
 <body>
-<div id="pixel-intro" aria-hidden="true"></div>
 <div class="grid-sweep"></div>
 <canvas id="fp-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
 
@@ -2037,81 +2007,6 @@
   window.addEventListener('resize', resize);
   resize();
   draw();
-})();
-
-/* ===== Pixel intro: grid pops up, then pixels burst out and reveal the site ===== */
-(function(){
-  const intro = document.getElementById('pixel-intro');
-  if(!intro) return;
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){ intro.remove(); return; }
-  const mobile = window.innerWidth < 600;
-  const W = window.innerWidth, H = window.innerHeight;
-  const cx = W/2, cy = H/2;
-  document.body.classList.add('intro-active');
-
-  // Phase 1 — the grid pops up
-  const grid = document.createElement('div');
-  grid.className = 'intro-grid';
-  intro.appendChild(grid);
-  requestAnimationFrame(function(){ grid.classList.add('on'); });
-
-  // Phase 2 — scattered pixels fly in and assemble onto the real content, tinted to match it, then dissolve to reveal it
-  function assemble(){
-    const sel = ['.logo-img', 'nav a', 'header .btn-primary', '.status-badge',
-                 '.hero-label', '.hero-title', '.hero-tagline', '.hero-description', '.hero-buttons button'];
-    function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
-    function gradColor(t){ return 'rgb(' + lerp(0,167,t) + ',' + lerp(212,139,t) + ',' + lerp(255,250,t) + ')'; } // cyan -> purple
-    let raw = [];
-    document.querySelectorAll(sel.join(',')).forEach(function(el){
-      const r = el.getBoundingClientRect();
-      if(r.width < 3 || r.height < 3 || r.top > H - 6 || r.bottom < 0) return;
-      const solid = el.classList.contains('btn-primary') || el.classList.contains('logo-img') || el.tagName === 'BUTTON';
-      const grad = el.classList.contains('gradient-text');
-      const baseCol = solid ? (el.classList.contains('logo-img') ? '#00d4ff' : '#00d4ff') : getComputedStyle(el).color;
-      const step = solid ? 6 : 5;
-      const size = solid ? 4 : 3;
-      const keep = solid ? 0.95 : 0.8;
-      for(let y = r.top; y < r.bottom; y += step){
-        for(let x = r.left; x < r.right; x += step){
-          if(Math.random() > keep) continue;
-          const col = grad ? gradColor((x - r.left) / Math.max(1, r.width)) : baseCol;
-          raw.push({ x: x, y: y, col: col, size: size });
-        }
-      }
-    });
-    // cap + shuffle for an even fill
-    const MAX = mobile ? 460 : 1200;
-    for(let i = raw.length - 1; i > 0; i--){ const j = (Math.random()*(i+1))|0; const t = raw[i]; raw[i] = raw[j]; raw[j] = t; }
-    if(raw.length > MAX) raw = raw.slice(0, MAX);
-
-    const arr = [];
-    raw.forEach(function(pt){
-      const p = document.createElement('div');
-      p.className = 'ipx';
-      const sx = Math.random() * W, sy = Math.random() * H;
-      p.style.cssText = 'width:'+pt.size+'px;height:'+pt.size+'px;left:'+sx+'px;top:'+sy+'px;background:'+pt.col+';color:'+pt.col+';opacity:0;transform:scale(0.2);';
-      intro.appendChild(p);
-      arr.push({ p: p, dx: pt.x - sx, dy: pt.y - sy });
-    });
-    void intro.offsetWidth;
-    // fly in slowly and snap precisely onto the content
-    arr.forEach(function(o){
-      const delay = Math.random() * 320;
-      o.p.style.transition = 'transform .95s cubic-bezier(.2,.75,.2,1) ' + delay + 'ms, opacity .3s ease ' + delay + 'ms';
-      o.p.style.transform = 'translate(' + o.dx + 'px,' + o.dy + 'px) scale(1)';
-      o.p.style.opacity = '1';
-    });
-    // hold the assembled, color-matched layout, then dissolve to reveal the real site beneath
-    setTimeout(function(){
-      arr.forEach(function(o){ o.p.style.transition = 'opacity .6s ease, transform .6s ease'; o.p.style.opacity = '0'; });
-      grid.style.transition = 'opacity .6s ease'; grid.style.opacity = '0';
-      intro.style.transition = 'opacity .65s ease'; intro.style.opacity = '0';
-      document.body.classList.remove('intro-active');
-    }, 1900);
-    setTimeout(function(){ intro.remove(); }, 2700);
-  }
-  setTimeout(assemble, 520);
 })();
 
 /* ===== Card motion graphics: only animate while on screen ===== */
