@@ -1246,7 +1246,7 @@
                     <p class="card-description">Custom ML models for prediction, classification, and anomaly detection</p>
                 </div>
                 <div class="card reveal" style="animation-delay:0.15s">
-                    <div class="card-photo" style="background-image:url(images/cards/card-nlp.webp)" aria-hidden="true"></div>
+                    <div class="card-photo" style="background-image:url(images/cards/card-nlp-chat.webp)" aria-hidden="true"></div>
                     <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><rect class="cm-bub" x="15" y="12" width="110" height="30" rx="12"/><rect class="cm-bub alt" x="75" y="54" width="110" height="30" rx="12" style="animation-delay:1s"/><rect class="cm-bub" x="15" y="96" width="62" height="30" rx="12" style="animation-delay:2s"/><path class="ln" d="M28 24 H100 M28 31 H80 M88 66 H170 M88 73 H150"/><circle class="cm-dot" cx="33" cy="111" r="3"/><circle class="cm-dot" cx="46" cy="111" r="3" style="animation-delay:0.15s"/><circle class="cm-dot" cx="59" cy="111" r="3" style="animation-delay:0.3s"/></svg>
                     <div class="card-icon"><img src="icons/icon_chat_nlp.png" alt="Natural Language Processing" width="40" height="40"></div>
                     <h3 class="card-title">Natural Language Processing</h3>
@@ -1448,11 +1448,16 @@
     gap: 10px;
   }
   .fp-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: linear-gradient(135deg, #00d4ff, #a78bfa);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700; color: #080c10; flex-shrink: 0;
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    background: url(icons/fp-avatar.png) center / cover no-repeat;
+    animation: fp-logo-pulse 5s ease-in-out infinite;
   }
+  /* One quick swell + cyan glow every 5 seconds, then rest */
+  @keyframes fp-logo-pulse {
+    0%, 76%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+    86% { transform: scale(1.12); box-shadow: 0 0 0 5px rgba(0,212,255,0.28), 0 0 14px rgba(0,212,255,0.55); }
+  }
+  @media (prefers-reduced-motion: reduce) { .fp-avatar { animation: none; } }
   .fp-header-name { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1; }
   .fp-header-status { font-size: 10px; color: #00ff9d; margin-top: 3px; display: flex; align-items: center; gap: 4px; }
   .fp-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00ff9d; box-shadow: 0 0 6px #00ff9d; animation: fp-pulse 2s infinite; }
@@ -1508,7 +1513,7 @@
 
 <div id="fp-chat-window">
   <div id="fp-chat-header">
-    <div class="fp-avatar">S</div>
+    <div class="fp-avatar" role="img" aria-label="FirstPriority AI"></div>
     <div class="fp-header-info">
       <div class="fp-header-name">Sarah</div>
       <div class="fp-header-status"><div class="fp-status-dot"></div>AI Agent · FirstPriority AI</div>
