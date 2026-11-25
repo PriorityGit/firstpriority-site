@@ -659,12 +659,14 @@
         @keyframes cmItem { 0%,100% { fill: rgba(0,212,255,0.05); stroke: var(--accent3); } 20%,40% { fill: rgba(0,212,255,0.3); stroke: var(--accent); } }
         /* Website creation: a browser window draws itself, the page builds in, the cursor clicks the CTA.
            Behind it, two of our client sites (names blurred) crossfade. */
-        .card-web > .card-photo { opacity: 0.4; filter: saturate(0.9) brightness(0.6); }
-        .card-web > .card-photo.cp-swap { animation: cpSwap 10s ease-in-out infinite; }
-        .card-web:hover > .card-photo { opacity: 0.5; }
-        .card-web:hover > .card-photo.cp-swap { animation-name: cpSwapHover; }
-        @keyframes cpSwap { 0%,40% { opacity: 0; } 50%,90% { opacity: 0.4; } 100% { opacity: 0; } }
-        @keyframes cpSwapHover { 0%,40% { opacity: 0; } 50%,90% { opacity: 0.5; } 100% { opacity: 0; } }
+        /* The two sites trade places: one fades fully out while the other fades in, never stacked */
+        .card-web { --cp: 0.4; }
+        .card-web:hover { --cp: 0.5; }
+        .card-web > .card-photo { filter: saturate(0.9) brightness(0.6); }
+        .card-web > .card-photo.cp-a { animation: cpA 12s ease-in-out infinite; }
+        .card-web > .card-photo.cp-b { animation: cpB 12s ease-in-out infinite; }
+        @keyframes cpA { 0%,42% { opacity: var(--cp); } 50%,92% { opacity: 0; } 100% { opacity: var(--cp); } }
+        @keyframes cpB { 0%,42% { opacity: 0; } 50%,92% { opacity: var(--cp); } 100% { opacity: 0; } }
         .cm-win { fill: rgba(0,212,255,0.04); stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 100; animation: cmWin 6s ease-in-out infinite; }
         @keyframes cmWin { 0% { stroke-dashoffset: 100; opacity: 1; } 15%,88% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
         .cm-build { fill: rgba(167,139,250,0.12); stroke: var(--accent3); stroke-width: 1.2; opacity: 0; animation: cmBuild 6s ease-out infinite; }
@@ -678,7 +680,8 @@
         .cm-click { fill: none; stroke: var(--accent2); stroke-width: 1.5; opacity: 0; animation: cmClick 6s ease-out infinite; }
         @keyframes cmClick { 0%,60% { opacity: 0; transform: scale(0.5); } 62% { opacity: 0.9; transform: scale(0.6); } 78%,100% { opacity: 0; transform: scale(2.2); } }
         @media (prefers-reduced-motion: reduce) {
-            .card-web > .card-photo.cp-swap { animation: none; opacity: 0; }
+            .card-web > .card-photo.cp-a { animation: none; opacity: var(--cp); }
+            .card-web > .card-photo.cp-b { animation: none; opacity: 0; }
             .cm-build, .cm-btn, .cm-cur { opacity: 1; }
             .card-motion * { animation: none !important; }
             .cm-route { stroke-dashoffset: 0; }
@@ -1248,8 +1251,8 @@
                     <p class="card-description">Chatbots, sentiment analysis, and document processing solutions</p>
                 </div>
                 <div class="card card-web reveal" style="animation-delay:0.2s">
-                    <div class="card-photo" style="background-image:url(images/cards/card-web-iwc.webp)" aria-hidden="true"></div>
-                    <div class="card-photo cp-swap" style="background-image:url(images/cards/card-web-vm.webp)" aria-hidden="true"></div>
+                    <div class="card-photo cp-a" style="background-image:url(images/cards/card-web-iwc.webp)" aria-hidden="true"></div>
+                    <div class="card-photo cp-b" style="background-image:url(images/cards/card-web-vm.webp)" aria-hidden="true"></div>
                     <svg class="card-motion" viewBox="0 0 200 140" aria-hidden="true" focusable="false"><rect class="cm-win" pathLength="100" x="20" y="12" width="160" height="116" rx="6"/><path class="ln" d="M20 28 H180"/><circle class="node" cx="30" cy="20" r="2.5"/><circle class="node" cx="39" cy="20" r="2.5"/><circle class="node" cx="48" cy="20" r="2.5"/><rect class="cm-build" x="32" y="36" width="136" height="30" rx="3" style="animation-delay:0.5s"/><rect class="cm-type" x="32" y="74" width="96" height="5" rx="2" style="animation-delay:1s"/><rect class="cm-type" x="32" y="84" width="72" height="5" rx="2" style="animation-delay:1.3s"/><rect class="cm-build" x="140" y="74" width="28" height="24" rx="3" style="animation-delay:1.6s"/><rect class="cm-btn" x="32" y="100" width="46" height="14" rx="7"/><circle class="cm-click" cx="55" cy="107" r="8"/><path class="cm-cur" d="M55 107 L55 123 L59.5 118.5 L63 126 L66 124.5 L62.5 117 L68.5 117 Z"/></svg>
                     <div class="card-icon"><svg viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Website Creation"><defs><linearGradient id="webIconGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect x="4" y="7" width="32" height="26" rx="4" fill="rgba(0,212,255,0.08)" stroke="url(#webIconGrad)" stroke-width="2.5"/><path d="M4 14 H36" stroke="url(#webIconGrad)" stroke-width="2"/><path d="M16 19 L12 23.5 L16 28 M24 19 L28 23.5 L24 28" fill="none" stroke="#00ff9d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                     <h3 class="card-title">Website Creation</h3>
