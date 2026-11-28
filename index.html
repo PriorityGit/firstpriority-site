@@ -249,7 +249,8 @@
 
         .hero-title {
             font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif;
-            font-size: clamp(3rem, 8vw, 6rem);
+            /* sized to the screen so the longest line always fits (it's ~12.7em wide) */
+            font-size: clamp(2rem, calc((100vw - 4rem) / 13), 6rem);
             font-weight: 800;
             line-height: 1.05;
             margin-bottom: 2rem;
@@ -274,6 +275,7 @@
 
         /* Metallic shine on the hero headline (vertical gradient + soft glow) */
         .hero-title { position: relative; }
+        @media (min-width: 768px) { .hero-title .shine-white, .hero-title .shine-blue { white-space: nowrap; } }
         .hero-title::before {
             content: ''; position: absolute; inset: -10% -5%; z-index: -1; pointer-events: none;
             background: radial-gradient(55% 60% at 40% 60%, rgba(0, 212, 255, 0.28), transparent 72%);
@@ -987,8 +989,8 @@
         <div class="hero-content">
             <p class="hero-label">AI Consulting & Strategy</p>
             <h1 class="hero-title">
-                <span class="shine-white">Exceptional Businesses</span><br>
-                <span class="shine-blue">Deserve Exceptional Standards</span>
+                <span class="shine-white">Never Miss a Customer.</span><br>
+                <span class="shine-blue">Never Settle for Less.</span>
             </h1>
             <p class="hero-tagline">// Built to a higher standard.</p>
             <p class="hero-description">
